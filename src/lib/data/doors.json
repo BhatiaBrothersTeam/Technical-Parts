@@ -1,0 +1,32 @@
+[
+  {
+    "id": "epc",
+    "slug": "epc",
+    "path": "/epc",
+    "title": "EPC Packages",
+    "intro": "Fabricated packages for oil and gas EPC projects: piping, vessels, exchangers, skids, manifolds, tanks and flare systems, built to your drawings and specifications.",
+    "points": [
+      "24 package types across piping, process vessels, skids and utilities",
+      "Fabricated to project drawings, data sheets and specifications",
+      "Submit a project requirement or upload your RFQ, BOQ and drawings",
+      "Support from enquiry through fabrication and delivery"
+    ],
+    "ctaLabel": "Submit Project Requirement",
+    "leadType": "epc_enquiry"
+  },
+  {
+    "id": "cj",
+    "slug": "cj",
+    "path": "/fabrication",
+    "title": "C&J Fabrication",
+    "intro": "Capability-led fabrication for EPC and industrial projects. Review our capability, then send your RFQ or drawing for review.",
+    "points": [
+      "Fabrication to your drawings and specifications",
+      "Review capability, reference projects and codes",
+      "Submit an RFQ or drawing for review by the team",
+      "Placeholder: scope details to be confirmed by the C&J team"
+    ],
+    "ctaLabel": "Submit RFQ / Drawing",
+    "leadType": "cj_enquiry"
+  }
+]

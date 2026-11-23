@@ -1,0 +1,223 @@
+{
+  "brand": {
+    "name": "technicalparts.com",
+    "tagline": "EPC packages & fabrication",
+    "group": "Part of BB Group"
+  },
+  "header": {
+    "searchPlaceholder": "Search EPC packages...",
+    "contactUs": "Contact Us",
+    "myRfq": "My RFQ",
+    "sendRfq": "Send an RFQ",
+    "langEn": "EN",
+    "langAr": "العربية",
+    "langArComingSoon": "Arabic — coming soon",
+    "nav": {
+      "home": "Home",
+      "packages": "EPC Packages",
+      "fabrication": "C&J Fabrication",
+      "projects": "Projects",
+      "industries": "Industries",
+      "about": "About",
+      "contact": "Contact"
+    }
+  },
+  "home": {
+    "heroKicker": "Keeping projects moving",
+    "heroHeadline1": "EPC packages",
+    "heroHeadline2": "& fabrication.",
+    "heroHeadline3": "Built to your drawings.",
+    "heroCopy": "Fabricated packages and fabrication capability for oil and gas EPC projects across the Middle East and beyond. Send your drawings and requirements for review.",
+    "heroPrimaryCta": "Send an RFQ",
+    "heroSecondaryCta": "Explore Our Capabilities",
+    "trustBar": [
+      { "title": "Fabricated Packages", "copy": "24 EPC package types" },
+      { "title": "Built to Specification", "copy": "Your drawings and codes" },
+      { "title": "Project Support", "copy": "From enquiry to delivery" }
+    ],
+    "doorsHeading": "How can we help?",
+    "doorCtas": { "epc": "Browse EPC Packages", "cj": "Explore Fabrication" },
+    "uploadHeading": "Have drawings or a BOQ?",
+    "uploadSubheading": "Send them here.",
+    "uploadCopy": "Upload your RFQ, BOQ, drawings or specification and our team will review your requirement.",
+    "uploadDropText": "Drop your file here or",
+    "uploadBrowseText": "Browse Files",
+    "uploadHelp": "PDF, Excel, Word, JPG or PNG (Max 25MB)",
+    "uploadCta": "Submit Your RFQ",
+    "uploadNeedHelp": "Need help? Contact our team",
+    "supportingHeading": "Fabrication and project support",
+    "supportingPoints": [
+      "EPC package fabrication",
+      "Built to project specifications",
+      "Multiple industries served",
+      "Enquiry-to-delivery support"
+    ],
+    "groupsLabel": "Package groups",
+    "viewAllPackages": "View all packages",
+    "featuredHeading": "Popular EPC Packages",
+    "industriesHeading": "Industries We Serve",
+    "industriesCopy": "Packages and fabrication for demanding industrial projects.",
+    "viewAllIndustries": "View all industries",
+    "capabilitiesHeading": "Fabrication Capability",
+    "capabilitiesCopy": "Review our fabrication capability, then send your drawings or RFQ for review.",
+    "capabilitiesCta": "Explore C&J Fabrication",
+    "supportHeading": "Need technical support or have a question?",
+    "supportCopy": "Our team is here to help.",
+    "supportCta": "Contact Us",
+    "whyHeading": "Why Choose Technicalparts.com",
+    "whyPoints": [
+      { "title": "Built to Your Drawings", "copy": "Fabrication to project specifications" },
+      { "title": "Wide Package Range", "copy": "Piping, vessels, skids and utilities" },
+      { "title": "End-to-End Support", "copy": "From enquiry to delivery" },
+      { "title": "Regional Reach", "copy": "Supporting projects across the Middle East" }
+    ]
+  },
+  "products": {
+    "title": "EPC Packages",
+    "intro": "Fabricated packages for oil and gas EPC projects. Search by package name or code, then submit your project requirement or add packages to your RFQ.",
+    "searchPlaceholder": "Search by package name or code...",
+    "filterCategory": "Package group",
+    "allCategories": "All Package Groups",
+    "noResults": "No packages match your search. Try a different keyword or group.",
+    "requestPrice": "Submit Requirement",
+    "addToRfq": "Add to RFQ",
+    "viewProduct": "View Package",
+    "resultsCount": "packages",
+    "codeLabel": "Package code",
+    "breadcrumbRoot": "EPC Packages",
+    "metaDescription": "Fabricated EPC packages for oil and gas projects: piping, process vessels, skids, manifolds, tanks and flare systems. Submit your project requirement or RFQ."
+  },
+  "productDetail": {
+    "overview": "Overview",
+    "features": "Typical Scope",
+    "applications": "Applications",
+    "specifications": "Specifications",
+    "industries": "Industries",
+    "requestPrice": "Submit Requirement",
+    "addToRfq": "Add to RFQ",
+    "needHelp": "Need help defining your requirement?",
+    "needHelpCopy": "Our team can review your drawings and help define the scope for this package.",
+    "relatedHeading": "Related Packages",
+    "sampleNotice": "Sample package information for demonstration."
+  },
+  "myRfq": {
+    "title": "My RFQ",
+    "subtitle": "Review your package list, add project and contact details and submit.",
+    "empty": "Your RFQ list is empty.",
+    "browseProducts": "Browse Packages",
+    "addAnother": "Add Another Package",
+    "uploadInstead": "Upload RFQ Instead",
+    "colProduct": "Package",
+    "colQty": "Qty",
+    "colDelivery": "Required Delivery",
+    "colNotes": "Notes",
+    "remove": "Remove",
+    "contactHeading": "Your Contact Details",
+    "submit": "Submit RFQ",
+    "submitting": "Submitting...",
+    "successHeading": "RFQ Submitted",
+    "successCopy": "Thank you. Your enquiry has been received and saved.",
+    "yourRfqId": "Your RFQ ID",
+    "errorHeading": "Submission Failed",
+    "errorCopy": "We could not save your RFQ. Please check your connection and try again."
+  },
+  "rfqUpload": {
+    "title": "Have drawings or an RFQ ready?",
+    "subtitle": "Send them to us.",
+    "copy": "Upload your RFQ, BOQ, drawings or specification. We accept PDF, Excel, Word, JPG and PNG files up to 25MB.",
+    "dropHeading": "Drop your file here",
+    "dropOr": "or",
+    "browseFiles": "Browse Files",
+    "maxSize": "Max 25MB per file",
+    "selectedFiles": "Selected files",
+    "remove": "Remove",
+    "messageLabel": "Message",
+    "submit": "Submit RFQ",
+    "submitting": "Submitting...",
+    "successHeading": "RFQ Received",
+    "successCopy": "Thank you. Your file has been saved and your enquiry recorded.",
+    "yourRfqId": "Your RFQ ID",
+    "errorHeading": "Upload Failed",
+    "errorCopy": "We could not save your file. Please check your connection and try again.",
+    "fileTooLarge": "exceeds the 25MB limit and was not added.",
+    "fileTypeNotAllowed": "is not an accepted file type."
+  },
+  "form": {
+    "name": "Full Name",
+    "email": "Email",
+    "phone": "Phone",
+    "country": "Country",
+    "company": "Company",
+    "jobTitle": "Job Title",
+    "project": "Project",
+    "endUser": "End User",
+    "message": "Message",
+    "enquiryType": "Enquiry Type",
+    "requiredDelivery": "Required Delivery",
+    "notes": "Notes",
+    "quantity": "Quantity",
+    "required": "Required",
+    "application": "Application",
+    "sizeCapacity": "Size / capacity",
+    "designCode": "Design code",
+    "deliveryLocation": "Delivery location",
+    "requiredDate": "Required delivery date"
+  },
+  "doors": {
+    "sampleNotice": "Sample capability content for demonstration.",
+    "formHeading": "Submit Your Requirement"
+  },
+  "fabrication": {
+    "capabilityHeading": "Capability overview",
+    "capabilityPlaceholder": "Placeholder: the C&J team will confirm the fabrication scope, size ranges and materials to show here.",
+    "capabilityItems": [
+      "Fabrication to client drawings and specifications",
+      "Feasibility review of every RFQ or drawing received",
+      "Inspection and documentation per project requirements"
+    ],
+    "referenceHeading": "Reference projects",
+    "referencePlaceholder": "Placeholder: verified reference projects will be listed here once approved. No project or customer is named until confirmed.",
+    "codesHeading": "Codes and certifications",
+    "codesPlaceholder": "Placeholder: only verified codes, certifications and approvals will be shown here once confirmed by the team.",
+    "submitHeading": "Submit an RFQ or drawing",
+    "uploadCta": "Upload drawings instead"
+  },
+  "projects": {
+    "title": "Projects",
+    "intro": "Reference projects for EPC packages and fabrication.",
+    "placeholder": "Placeholder: verified reference projects will be listed here once approved. No project or customer is named until confirmed.",
+    "sampleNotice": "Sample section. No real project is shown yet.",
+    "cta": "Discuss your project"
+  },
+  "about": {
+    "title": "About Technicalparts.com",
+    "intro": "technicalparts.com is BB Group's enquiry-led website for oil and gas EPC fabricated packages and C&J fabrication across the Middle East and beyond.",
+    "sampleNotice": "Company details shown are placeholders pending confirmation."
+  },
+  "contact": {
+    "title": "Contact Us",
+    "intro": "Have a question or a requirement? Send us a message and our team will get back to you.",
+    "detailsHeading": "Contact Details",
+    "placeholderNotice": "Contact details are placeholders pending confirmation.",
+    "formHeading": "General Enquiry"
+  },
+  "notFound": {
+    "title": "Page Not Found",
+    "copy": "The page you are looking for does not exist or has moved.",
+    "cta": "Back to Home"
+  },
+  "footer": {
+    "quickLinks": "Quick Links",
+    "resources": "Resources",
+    "contact": "Contact",
+    "rights": "All rights reserved.",
+    "privacy": "Privacy Policy",
+    "terms": "Terms & Conditions"
+  },
+  "common": {
+    "sample": "Sample",
+    "loading": "Loading...",
+    "close": "Close",
+    "back": "Back"
+  }
+}

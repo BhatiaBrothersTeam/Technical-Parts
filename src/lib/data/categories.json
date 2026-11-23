@@ -1,0 +1,26 @@
+[
+  {
+    "id": "piping-plant-works",
+    "name": "Piping & Plant Works",
+    "slug": "piping-plant-works",
+    "description": "Piping, shutdown, structural and plant works packages fabricated and installed to project drawings."
+  },
+  {
+    "id": "process-vessels-exchangers",
+    "name": "Process Vessels & Exchangers",
+    "slug": "process-vessels-exchangers",
+    "description": "Separators, exchangers, reactors, columns, filters and tanks fabricated to process data sheets."
+  },
+  {
+    "id": "skids-manifolds",
+    "name": "Skids & Manifolds",
+    "slug": "skids-manifolds",
+    "description": "Skid-mounted metering, manifold, launcher and rack packages supplied pre-assembled."
+  },
+  {
+    "id": "safety-marine-utilities",
+    "name": "Safety, Marine & Utilities",
+    "slug": "safety-marine-utilities",
+    "description": "Fire protection, marine, flare and rotating-equipment packages for oil and gas facilities."
+  }
+]

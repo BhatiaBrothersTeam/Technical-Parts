@@ -2,25 +2,168 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #101a2b;
+
+  --tp-navy: #0b2545;
+  --tp-navy-dark: #071a33;
+  --tp-blue: #1d5fbf;
+  --tp-blue-dark: #164a99;
+  --tp-blue-light: #eaf1fb;
+  --tp-neutral-50: #f7f9fb;
+  --tp-neutral-100: #eef1f5;
+  --tp-neutral-200: #e2e8f0;
+  --tp-neutral-600: #4b5563;
+  --tp-neutral-700: #334155;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-tp-navy: var(--tp-navy);
+  --color-tp-navy-dark: var(--tp-navy-dark);
+  --color-tp-blue: var(--tp-blue);
+  --color-tp-blue-dark: var(--tp-blue-dark);
+  --color-tp-blue-light: var(--tp-blue-light);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/*
+ * Everything below lives inside Tailwind's own layers (base/components) so
+ * that utility classes on an element (e.g. `bg-tp-navy`, `text-white`) can
+ * always override these defaults. Unlayered CSS beats layered CSS
+ * regardless of source order or selector specificity, so anything defined
+ * outside these @layer blocks would silently win over Tailwind utilities.
+ */
+
+@layer base {
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  }
+
+  h1, h2, h3, h4 {
+    color: var(--tp-navy);
+  }
+
+  input, select, textarea {
+    border: 1px solid var(--tp-neutral-200);
+    border-radius: 0.5rem;
+    padding-block: 0.55rem;
+    padding-inline: 0.75rem;
+    font-size: 0.9375rem;
+    width: 100%;
+    background: white;
+    color: var(--foreground);
+  }
+
+  input:focus, select:focus, textarea:focus {
+    outline: 2px solid var(--tp-blue);
+    outline-offset: 1px;
+    border-color: var(--tp-blue);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  .container-tp {
+    max-width: 80rem;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+
+  @media (min-width: 768px) {
+    .container-tp {
+      padding-inline: 2rem;
+    }
+  }
+
+  .section-y {
+    padding-block: 3.5rem;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 0.5rem;
+    padding-block: 0.625rem;
+    padding-inline: 1.25rem;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+    white-space: nowrap;
+  }
+
+  .btn-primary {
+    background: var(--tp-blue);
+    color: white;
+  }
+  .btn-primary:hover {
+    background: var(--tp-blue-dark);
+  }
+
+  .btn-outline {
+    background: transparent;
+    color: white;
+    border: 1.5px solid rgba(255, 255, 255, 0.6);
+  }
+  .btn-outline:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .btn-outline-navy {
+    background: transparent;
+    color: var(--tp-navy);
+    border: 1.5px solid var(--tp-neutral-200);
+  }
+  .btn-outline-navy:hover {
+    background: var(--tp-neutral-50);
+    border-color: var(--tp-navy);
+  }
+
+  .btn-sm {
+    padding-block: 0.4rem;
+    padding-inline: 0.85rem;
+    font-size: 0.8125rem;
+  }
+
+  .card {
+    background: white;
+    border: 1px solid var(--tp-neutral-200);
+    border-radius: 0.75rem;
+  }
+
+  .badge-sample {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 999px;
+    background: #fff7ed;
+    color: #9a3412;
+    border: 1px solid #fed7aa;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    padding-inline: 0.5rem;
+    padding-block: 0.15rem;
+  }
+
+  .link-blue {
+    color: var(--tp-blue);
+    font-weight: 600;
+  }
+  .link-blue:hover {
+    color: var(--tp-blue-dark);
+    text-decoration: underline;
+  }
+
+  .form-label {
+    display: block;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--tp-neutral-700);
+    margin-bottom: 0.3rem;
+  }
 }

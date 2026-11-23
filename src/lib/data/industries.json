@@ -1,0 +1,8 @@
+[
+  { "id": "oil-gas", "name": "Oil & Gas", "slug": "oil-gas" },
+  { "id": "petrochemical", "name": "Petrochemical", "slug": "petrochemical" },
+  { "id": "power", "name": "Power", "slug": "power" },
+  { "id": "water-wastewater", "name": "Water & Wastewater", "slug": "water-wastewater" },
+  { "id": "manufacturing", "name": "Manufacturing", "slug": "manufacturing" },
+  { "id": "marine", "name": "Marine", "slug": "marine" }
+]
