@@ -16,6 +16,10 @@ import type { Product, Category, Industry, Door } from "@/lib/types";
  * copy are site content and always come from the local JSON files.
  */
 
+import { CJ_BRAND, isCjProduct } from "@/lib/product-links";
+
+export { CJ_BRAND };
+
 interface Catalogue {
   products: Product[];
   categories: Category[];
@@ -56,6 +60,33 @@ export async function getProductsBySlugs(slugs: string[], fallbackLimit: number)
   return picked.length > 0 ? picked : all.slice(0, fallbackLimit);
 }
 
+/**
+ * All packages from a given brand/manufacturer (case-insensitive substring
+ * match, e.g. "C&J" matches "C&J Gulf Equipment Manufacturing L.L.C.").
+ */
+export async function getProductsByBrand(brand: string): Promise<Product[]> {
+  const wanted = brand.trim().toLowerCase();
+  if (!wanted) return [];
+  return (await getProducts()).filter((p) => p.brand.toLowerCase().includes(wanted));
+}
+
+/**
+ * All packages EXCEPT those from a given brand. Used to keep the general EPC
+ * catalogue free of packages that belong to a brand's own dedicated page
+ * (e.g. C&J Gulf's packages live on /fabrication, not /epc).
+ */
+export async function getProductsExcludingBrand(brand: string): Promise<Product[]> {
+  const unwanted = brand.trim().toLowerCase();
+  if (!unwanted) return getProducts();
+  return (await getProducts()).filter((p) => !p.brand.toLowerCase().includes(unwanted));
+}
+
+/** Only the categories that still have at least one package in `products`. */
+export async function getCategoriesFor(products: Product[]): Promise<Category[]> {
+  const liveSlugs = new Set(products.map((p) => p.category));
+  return (await getCategories()).filter((c) => liveSlugs.has(c.slug));
+}
+
 export async function getCategories(): Promise<Category[]> {
   return (await loadCatalogue()).categories;
 }
@@ -63,6 +94,21 @@ export async function getCategories(): Promise<Category[]> {
 export async function getCategoryBySlug(slug: string): Promise<Category | undefined> {
   const wanted = normalizeSlug(slug);
   return (await getCategories()).find((c) => normalizeSlug(c.slug) === wanted);
+}
+
+/** EPC catalogue: everything that is not a C&J product. */
+export async function getEpcProducts(): Promise<Product[]> {
+  return (await getProducts()).filter((x) => !isCjProduct(x));
+}
+
+/** Groups (categories) that contain at least one C&J product. */
+export async function getCjCategories(): Promise<Category[]> {
+  return getCategoriesFor(await getProductsByBrand(CJ_BRAND));
+}
+
+/** Groups (categories) that contain at least one EPC package. */
+export async function getEpcCategories(): Promise<Category[]> {
+  return getCategoriesFor(await getEpcProducts());
 }
 
 export function getIndustries(): Industry[] {

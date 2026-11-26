@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getIndustries } from "@/lib/data";
 import { t } from "@/lib/locale";
+import { PageHero } from "@/components/PageHero";
 import { IconRig, IconFlask, IconBolt, IconDroplet, IconFactory, IconAnchor } from "@/components/icons";
 
 export const metadata: Metadata = {
@@ -31,34 +32,36 @@ export default function IndustriesPage() {
   const industries = getIndustries();
 
   return (
-    <div className="container-tp section-y">
-      <h1 className="text-3xl font-bold mb-2">Industries We Serve</h1>
-      <p className="text-[var(--tp-neutral-600)] max-w-2xl mb-8">
-        Solutions for the world&apos;s most demanding industries, backed by technical expertise and a trusted
-        supply chain.
-      </p>
-
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-12">
-        {industries.map((industry) => {
-          const Icon = industryIcons[industry.slug as keyof typeof industryIcons];
-          return (
-            <div key={industry.id} id={industry.slug} className="card p-6">
-              <div className="h-11 w-11 rounded-lg bg-tp-blue-light text-tp-blue flex items-center justify-center mb-4">
-                <Icon className="h-6 w-6" />
+    <>
+      <PageHero
+        eyebrow="Sectors"
+        title="Industries We Serve"
+        subtitle="Solutions for demanding industries, backed by technical expertise and a trusted supply chain."
+        crumbs={[{ label: "Industries" }]}
+      />
+      <div className="container-tp section-y">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-14">
+          {industries.map((industry) => {
+            const Icon = industryIcons[industry.slug as keyof typeof industryIcons];
+            return (
+              <div key={industry.id} id={industry.slug} className="card card-hover p-7 scroll-mt-40">
+                <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-tp-blue to-tp-navy text-white flex items-center justify-center mb-5 shadow-md">
+                  <Icon className="h-6 w-6" />
+                </div>
+                <h2 className="text-lg font-extrabold text-tp-navy mb-2">{industry.name}</h2>
+                <p className="text-sm text-[var(--tp-neutral-600)]">{industryCopy[industry.slug]}</p>
               </div>
-              <h2 className="font-bold text-tp-navy mb-1.5">{industry.name}</h2>
-              <p className="text-sm text-[var(--tp-neutral-600)]">{industryCopy[industry.slug]}</p>
-            </div>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
 
-      <div className="card p-6 bg-tp-blue-light flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <p className="text-tp-navy font-semibold">Don&apos;t see your industry? We can still help.</p>
-        <Link href="/contact" className="btn btn-primary shrink-0">
-          {t.header.contactUs}
-        </Link>
+        <div className="rounded-2xl p-8 bg-tp-blue-light border border-tp-blue/15 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <p className="text-tp-navy font-bold text-lg">Don&apos;t see your industry? We can still help.</p>
+          <Link href="/contact" className="btn btn-primary shrink-0">
+            {t.header.contactUs}
+          </Link>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

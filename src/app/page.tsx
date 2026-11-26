@@ -1,10 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { t } from "@/lib/locale";
-import { getCategories, getDoors, getIndustries, getProducts, getProductsBySlugs } from "@/lib/data";
+import { CJ_BRAND, getCjCategories, getDoors, getIndustries, getProductsByBrand } from "@/lib/data";
 import { DoorCard } from "@/components/DoorCard";
 import { IndustryCard } from "@/components/IndustryCard";
 import { ProductCard } from "@/components/ProductCard";
+import { SectionHeading } from "@/components/SectionHeading";
 import {
   IconRig,
   IconBlueprint,
@@ -12,9 +13,7 @@ import {
   IconShieldCheck,
   IconHeadset,
   IconUpload,
-  IconFactory,
   IconGear,
-  IconTool,
 } from "@/components/icons";
 
 const doorIcons: Record<string, typeof IconRig> = {
@@ -41,28 +40,20 @@ const industryImages: Record<string, string> = {
   marine: "/images/photos/industry-marine.jpg",
 };
 
-const featuredSlugs = [
-  "process-power-underground-piping-packages",
-  "oil-gas-separator-knockout-drums",
-  "metering-packages-crude-gas",
-  "storage-tanks-api-650",
-];
-
-const supportingIcons = [IconFactory, IconShieldCheck, IconGlobe, IconHeadset];
+const trustIcons = [IconGear, IconBlueprint, IconShieldCheck];
 
 export default async function HomePage() {
   const doors = getDoors();
   const industries = getIndustries();
-  const [categories, allProducts, featured] = await Promise.all([
-    getCategories(),
-    getProducts(),
-    getProductsBySlugs(featuredSlugs, 4),
-  ]);
+  // The home page's package sections show the C&J range (the only packages
+  // uploaded so far); EPC packages appear on /epc once they are added.
+  const [allProducts, categories] = await Promise.all([getProductsByBrand(CJ_BRAND), getCjCategories()]);
+  const featured = allProducts.slice(0, 4);
 
   return (
     <>
       {/* Hero */}
-      <section className="relative overflow-hidden bg-tp-navy text-white">
+      <section className="relative overflow-hidden bg-tp-navy-dark text-white">
         <div className="absolute inset-0">
           <Image
             src="/images/photos/hero-refinery.jpg"
@@ -72,48 +63,46 @@ export default async function HomePage() {
             className="object-cover"
             sizes="100vw"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-tp-navy/95 via-tp-navy/70 to-tp-navy/20" />
+          <div className="absolute inset-0 bg-tp-navy-dark/55 md:bg-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-tp-navy-dark/95 via-tp-navy/70 md:via-tp-navy/65 to-tp-navy/30 md:to-transparent" />
+          <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-tp-navy-dark/80 to-transparent" />
         </div>
 
-        <div className="hidden lg:flex absolute inset-y-0 end-8 items-center z-10">
-          <span
-            className="uppercase tracking-[0.3em] text-xs font-semibold text-white/70"
-            style={{ writingMode: "vertical-rl" }}
-          >
-            {t.home.heroKicker}
-          </span>
-        </div>
-
-        <div className="container-tp relative py-20 md:py-28">
-          <p className="uppercase tracking-widest text-xs font-semibold text-tp-blue mb-4">
-            {t.home.heroKicker}
-          </p>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight max-w-2xl text-white">
+        <div className="container-tp relative pt-20 pb-36 md:pt-28 md:pb-44">
+          <p className="eyebrow eyebrow-light mb-5 fade-up">{t.home.heroKicker}</p>
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-[1.05] max-w-3xl text-white fade-up">
             {t.home.heroHeadline1}
             <br />
             {t.home.heroHeadline2}
             <br />
-            <span className="text-tp-blue">{t.home.heroHeadline3}</span>
+            <span className="text-tp-accent">{t.home.heroHeadline3}</span>
           </h1>
-          <p className="mt-5 max-w-xl text-white/80 text-base md:text-lg">{t.home.heroCopy}</p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Link href="/rfq" className="btn btn-primary">
-              {t.home.heroPrimaryCta}
+          <p className="mt-6 max-w-xl text-white/80 text-base md:text-lg fade-up">{t.home.heroCopy}</p>
+          <div className="mt-9 flex flex-wrap gap-3 fade-up">
+            <Link href="/rfq" className="btn btn-accent">
+              {t.home.heroPrimaryCta} <span aria-hidden>&rarr;</span>
             </Link>
             <Link href="/fabrication" className="btn btn-outline">
               {t.home.heroSecondaryCta}
             </Link>
           </div>
+        </div>
+      </section>
 
-          <div className="mt-14 grid sm:grid-cols-3 gap-6 max-w-3xl">
+      {/* Trust bar overlapping the hero */}
+      <section className="relative z-10 -mt-20 md:-mt-24">
+        <div className="container-tp">
+          <div className="card shadow-lg grid sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-[var(--tp-neutral-200)]">
             {t.home.trustBar.map((item, i) => {
-              const Icon = [IconGear, IconBlueprint, IconShieldCheck][i];
+              const Icon = trustIcons[i];
               return (
-                <div key={item.title} className="flex items-start gap-3">
-                  <Icon className="h-6 w-6 text-tp-blue shrink-0 mt-0.5" />
+                <div key={item.title} className="flex items-center gap-4 p-6">
+                  <div className="h-12 w-12 shrink-0 rounded-xl bg-tp-blue-light text-tp-blue flex items-center justify-center">
+                    <Icon className="h-6 w-6" />
+                  </div>
                   <div>
-                    <p className="font-semibold">{item.title}</p>
-                    <p className="text-sm text-white/70">{item.copy}</p>
+                    <p className="font-bold text-tp-navy">{item.title}</p>
+                    <p className="text-sm text-[var(--tp-neutral-600)]">{item.copy}</p>
                   </div>
                 </div>
               );
@@ -123,10 +112,10 @@ export default async function HomePage() {
       </section>
 
       {/* Two divisions */}
-      <section className="section-y bg-[var(--tp-neutral-50)]">
+      <section className="section-y">
         <div className="container-tp">
-          <h2 className="text-2xl md:text-3xl font-bold text-center mb-10">{t.home.doorsHeading}</h2>
-          <div className="grid sm:grid-cols-2 gap-6 max-w-4xl mx-auto">
+          <SectionHeading eyebrow="Our divisions" title={t.home.doorsHeading} center />
+          <div className="grid md:grid-cols-2 gap-6">
             {doors.map((door) => (
               <DoorCard
                 key={door.id}
@@ -142,105 +131,92 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Upload RFQ strip */}
-      <section className="section-y">
-        <div className="container-tp grid md:grid-cols-2 gap-8 items-center">
+      {/* Featured packages */}
+      {featured.length > 0 && (
+        <section className="section-y bg-[var(--tp-neutral-50)]">
+          <div className="container-tp">
+            <SectionHeading
+              eyebrow="C&J packages"
+              title={t.home.featuredHeading}
+              linkHref="/fabrication"
+              linkLabel={t.home.viewAllPackages}
+            />
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
+              {featured.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+
+            {categories.length > 0 && (
+              <div className="mt-12">
+                <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--tp-neutral-600)] mb-4">
+                  {t.home.groupsLabel}
+                </p>
+                <div className="flex flex-wrap gap-2.5">
+                  {categories.map((category) => {
+                    const count = allProducts.filter((p) => p.category === category.slug).length;
+                    return (
+                      <Link
+                        key={category.slug}
+                        href={`/fabrication#${category.slug}`}
+                        className="inline-flex items-center gap-2 rounded-full bg-white border border-[var(--tp-neutral-200)] px-4 py-2 text-sm font-semibold text-tp-navy shadow-sm hover:border-tp-blue hover:text-tp-blue transition-colors"
+                      >
+                        {category.name}
+                        <span className="text-xs font-bold text-tp-blue bg-tp-blue-light rounded-full px-2 py-0.5">
+                          {count}
+                        </span>
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </div>
+        </section>
+      )}
+
+      {/* Upload RFQ band */}
+      <section className="page-banner">
+        <div className="container-tp relative z-10 py-16 grid md:grid-cols-2 gap-10 items-center">
           <div>
-            <h2 className="text-2xl md:text-3xl font-bold">{t.home.uploadHeading}</h2>
-            <p className="text-2xl md:text-3xl font-bold text-tp-blue mb-3">{t.home.uploadSubheading}</p>
-            <p className="text-[var(--tp-neutral-600)]">{t.home.uploadCopy}</p>
-            <Link href="/contact" className="link-blue text-sm mt-3 inline-block">
+            <p className="eyebrow eyebrow-light mb-3">Request a quote</p>
+            <h2 className="text-3xl md:text-4xl font-extrabold text-white">{t.home.uploadHeading}</h2>
+            <p className="text-3xl md:text-4xl font-extrabold text-tp-accent mb-4">{t.home.uploadSubheading}</p>
+            <p className="text-white/75 max-w-md">{t.home.uploadCopy}</p>
+            <Link
+              href="/contact"
+              className="inline-block mt-4 text-sm font-semibold text-white/90 hover:text-white underline underline-offset-4"
+            >
               {t.home.uploadNeedHelp}
             </Link>
           </div>
           <Link
             href="/rfq"
-            className="card border-dashed border-2 flex flex-col items-center justify-center text-center p-10 hover:border-tp-blue transition-colors"
+            className="rounded-2xl border-2 border-dashed border-white/35 bg-white/[0.06] backdrop-blur flex flex-col items-center justify-center text-center p-10 hover:border-tp-accent hover:bg-white/10 transition-colors"
           >
-            <IconUpload className="h-9 w-9 text-tp-blue mb-3" />
-            <p className="font-semibold text-tp-navy">
-              {t.home.uploadDropText} <span className="link-blue">{t.home.uploadBrowseText}</span>
+            <span className="h-14 w-14 rounded-full bg-tp-accent text-tp-navy-dark flex items-center justify-center mb-4">
+              <IconUpload className="h-7 w-7" />
+            </span>
+            <p className="font-semibold text-white">
+              {t.home.uploadDropText}{" "}
+              <span className="text-tp-accent underline underline-offset-4">{t.home.uploadBrowseText}</span>
             </p>
-            <p className="text-xs text-[var(--tp-neutral-600)] mt-2">{t.home.uploadHelp}</p>
-            <span className="btn btn-primary mt-5">{t.home.uploadCta}</span>
+            <p className="text-xs text-white/60 mt-2">{t.home.uploadHelp}</p>
+            <span className="btn btn-accent mt-6">{t.home.uploadCta}</span>
           </Link>
         </div>
       </section>
 
-      {/* Package groups + supporting points */}
-      <section className="section-y bg-[var(--tp-neutral-50)]">
-        <div className="container-tp grid md:grid-cols-2 gap-10 items-start">
-          <div>
-            <h2 className="text-xl font-bold mb-6">{t.home.supportingHeading}</h2>
-            <div className="grid grid-cols-2 gap-5">
-              {t.home.supportingPoints.map((point, i) => {
-                const Icon = supportingIcons[i] ?? IconTool;
-                return (
-                  <div key={point} className="flex items-center gap-2.5">
-                    <Icon className="h-6 w-6 text-tp-blue shrink-0" />
-                    <span className="text-sm font-medium text-tp-navy">{point}</span>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-          <div>
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-xs font-bold uppercase tracking-wide text-[var(--tp-neutral-600)]">
-                {t.home.groupsLabel}
-              </h3>
-              <Link href="/epc" className="link-blue text-sm">
-                {t.home.viewAllPackages}
-              </Link>
-            </div>
-            <div className="grid grid-cols-2 gap-3">
-              {categories.slice(0, 6).map((category) => {
-                const count = allProducts.filter((p) => p.category === category.slug).length;
-                return (
-                  <Link
-                    key={category.slug}
-                    href={`/epc/${category.slug}`}
-                    className="card p-4 hover:border-tp-blue/40 hover:shadow-md transition-shadow"
-                  >
-                    <p className="text-sm font-bold text-tp-navy">{category.name}</p>
-                    <p className="text-xs font-semibold text-tp-blue mt-1">
-                      {count} {count === 1 ? "package" : "packages"}
-                    </p>
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Featured packages */}
+      {/* Industries */}
       <section className="section-y">
         <div className="container-tp">
-          <div className="flex items-center justify-between mb-8">
-            <h2 className="text-2xl md:text-3xl font-bold">{t.home.featuredHeading}</h2>
-            <Link href="/epc" className="link-blue text-sm">
-              {t.home.viewAllPackages}
-            </Link>
-          </div>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
-            {featured.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Industries */}
-      <section className="section-y bg-[var(--tp-neutral-50)]">
-        <div className="container-tp">
-          <div className="flex items-center justify-between mb-2">
-            <h2 className="text-2xl md:text-3xl font-bold">{t.home.industriesHeading}</h2>
-            <Link href="/industries" className="link-blue text-sm">
-              {t.home.viewAllIndustries}
-            </Link>
-          </div>
-          <p className="text-[var(--tp-neutral-600)] mb-8">{t.home.industriesCopy}</p>
+          <SectionHeading
+            eyebrow="Sectors"
+            title={t.home.industriesHeading}
+            copy={t.home.industriesCopy}
+            linkHref="/industries"
+            linkLabel={t.home.viewAllIndustries}
+          />
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
             {industries.map((industry) => (
               <IndustryCard
@@ -254,54 +230,56 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Fabrication capability + support */}
-      <section className="section-y">
-        <div className="container-tp grid md:grid-cols-2 gap-6">
-          <div className="card overflow-hidden grid sm:grid-cols-2">
-            <div className="bg-tp-navy text-white p-8 flex flex-col justify-center">
-              <h2 className="text-xl font-bold mb-2 text-white">{t.home.capabilitiesHeading}</h2>
-              <p className="text-white/75 mb-5">{t.home.capabilitiesCopy}</p>
-              <Link href="/fabrication" className="btn btn-outline self-start">
-                {t.home.capabilitiesCta}
-              </Link>
-            </div>
-            <div className="relative min-h-[220px] sm:min-h-full">
-              <Image
-                src="/images/photos/capability.jpg"
-                alt="Industrial fabrication and engineering"
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 100vw, 25vw"
-              />
-            </div>
-          </div>
-          <div className="card p-8 bg-tp-blue-light flex flex-col justify-center">
-            <h2 className="text-xl font-bold text-tp-navy mb-2">{t.home.supportHeading}</h2>
-            <p className="text-[var(--tp-neutral-600)] mb-5">{t.home.supportCopy}</p>
-            <Link href="/contact" className="btn btn-primary self-start">
-              {t.home.supportCta}
-            </Link>
-          </div>
-        </div>
-      </section>
-
       {/* Why choose us */}
       <section className="section-y bg-[var(--tp-neutral-50)]">
         <div className="container-tp">
-          <h2 className="text-2xl md:text-3xl font-bold text-center mb-10">{t.home.whyHeading}</h2>
+          <SectionHeading eyebrow="Why us" title={t.home.whyHeading} center />
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {t.home.whyPoints.map((point, i) => {
               const Icon = [IconBlueprint, IconGear, IconHeadset, IconGlobe][i];
               return (
-                <div key={point.title} className="text-center">
-                  <div className="h-12 w-12 rounded-full bg-tp-blue-light text-tp-blue flex items-center justify-center mx-auto mb-3">
+                <div key={point.title} className="card card-hover p-6">
+                  <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-tp-blue to-tp-navy text-white flex items-center justify-center mb-4 shadow-md">
                     <Icon className="h-6 w-6" />
                   </div>
-                  <p className="font-semibold text-tp-navy">{point.title}</p>
+                  <p className="font-bold text-tp-navy mb-1">{point.title}</p>
                   <p className="text-sm text-[var(--tp-neutral-600)]">{point.copy}</p>
                 </div>
               );
             })}
+          </div>
+        </div>
+      </section>
+
+      {/* Capability + support */}
+      <section className="section-y">
+        <div className="container-tp grid md:grid-cols-2 gap-6">
+          <div className="relative overflow-hidden rounded-2xl min-h-[18rem] flex shadow-md">
+            <Image
+              src="/images/photos/capability.jpg"
+              alt="Industrial fabrication and engineering"
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 50vw"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-tp-navy-dark/95 via-tp-navy/80 to-tp-navy/30" />
+            <div className="relative p-8 md:p-10 text-white flex flex-col justify-center max-w-md">
+              <h2 className="text-2xl font-extrabold mb-2 text-white">{t.home.capabilitiesHeading}</h2>
+              <p className="text-white/80 mb-6">{t.home.capabilitiesCopy}</p>
+              <Link href="/fabrication" className="btn btn-accent self-start">
+                {t.home.capabilitiesCta} <span aria-hidden>&rarr;</span>
+              </Link>
+            </div>
+          </div>
+          <div className="rounded-2xl p-8 md:p-10 bg-tp-blue-light border border-tp-blue/15 flex flex-col justify-center">
+            <span className="h-12 w-12 rounded-xl bg-white text-tp-blue flex items-center justify-center shadow-sm mb-4">
+              <IconHeadset className="h-6 w-6" />
+            </span>
+            <h2 className="text-2xl font-extrabold text-tp-navy mb-2">{t.home.supportHeading}</h2>
+            <p className="text-[var(--tp-neutral-600)] mb-6">{t.home.supportCopy}</p>
+            <Link href="/contact" className="btn btn-primary self-start">
+              {t.home.supportCta}
+            </Link>
           </div>
         </div>
       </section>

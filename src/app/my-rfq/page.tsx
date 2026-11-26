@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState, type FormEvent } from "react";
 import { t } from "@/lib/locale";
 import { useRfq } from "@/lib/rfq-context";
+import { PageHero } from "@/components/PageHero";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
@@ -56,7 +57,7 @@ export default function MyRfqPage() {
           <p className="text-[var(--tp-neutral-600)] mb-4">{t.myRfq.successCopy}</p>
           <p className="text-sm text-[var(--tp-neutral-600)]">{t.myRfq.yourRfqId}</p>
           <p className="text-3xl font-mono font-bold text-tp-blue mb-6">{leadId}</p>
-          <Link href="/epc" className="btn btn-primary">
+          <Link href="/fabrication" className="btn btn-primary">
             {t.myRfq.browseProducts}
           </Link>
         </div>
@@ -65,14 +66,19 @@ export default function MyRfqPage() {
   }
 
   return (
+    <>
+    <PageHero
+      eyebrow="Your enquiry"
+      title={t.myRfq.title}
+      subtitle={t.myRfq.subtitle}
+      crumbs={[{ label: t.myRfq.title }]}
+    />
     <div className="container-tp section-y">
-      <h1 className="text-3xl font-bold mb-1">{t.myRfq.title}</h1>
-      <p className="text-[var(--tp-neutral-600)] mb-8 max-w-2xl">{t.myRfq.subtitle}</p>
 
       {lines.length === 0 ? (
         <div className="card p-10 text-center">
           <p className="text-[var(--tp-neutral-600)] mb-4">{t.myRfq.empty}</p>
-          <Link href="/epc" className="btn btn-primary">
+          <Link href="/fabrication" className="btn btn-primary">
             {t.myRfq.browseProducts}
           </Link>
         </div>
@@ -141,7 +147,7 @@ export default function MyRfqPage() {
           </div>
 
           <div className="flex flex-wrap gap-3">
-            <Link href="/epc" className="btn btn-outline-navy">
+            <Link href="/fabrication" className="btn btn-outline-navy">
               {t.myRfq.addAnother}
             </Link>
             <Link href="/rfq" className="btn btn-outline-navy">
@@ -201,5 +207,6 @@ export default function MyRfqPage() {
         </form>
       )}
     </div>
+    </>
   );
 }

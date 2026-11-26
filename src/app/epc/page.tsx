@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
-import { getCategories, getProducts } from "@/lib/data";
+import { getEpcCategories, getEpcProducts } from "@/lib/data";
 import { ProductsBrowser } from "@/components/ProductsBrowser";
+import { EnquiryForm } from "@/components/EnquiryForm";
+import { PageHero } from "@/components/PageHero";
 import { t } from "@/lib/locale";
 
 export const metadata: Metadata = {
@@ -9,13 +11,39 @@ export const metadata: Metadata = {
 };
 
 export default async function PackagesPage() {
-  const [products, categories] = await Promise.all([getProducts(), getCategories()]);
+  // C&J products belong to /fabrication and never appear in the EPC catalogue.
+  const [products, categories] = await Promise.all([getEpcProducts(), getEpcCategories()]);
 
   return (
-    <div className="container-tp section-y">
-      <h1 className="text-3xl font-bold mb-2">{t.products.title}</h1>
-      <p className="text-[var(--tp-neutral-600)] mb-8 max-w-2xl">{t.products.intro}</p>
-      <ProductsBrowser products={products} categories={categories} />
-    </div>
+    <>
+      <PageHero
+        eyebrow="Division"
+        title={t.products.title}
+        subtitle={t.products.intro}
+        crumbs={[{ label: t.products.title }]}
+      />
+      <div className="container-tp section-y">
+        {products.length > 0 ? (
+          <ProductsBrowser products={products} categories={categories} />
+        ) : (
+          <div className="grid lg:grid-cols-5 gap-10 items-start">
+            <div className="lg:col-span-2">
+              <p className="eyebrow mb-3">Catalogue</p>
+              <h2 className="section-title mb-3">{t.products.emptyHeading}</h2>
+              <p className="text-[var(--tp-neutral-600)]">{t.products.emptyCopy}</p>
+            </div>
+            <div className="lg:col-span-3">
+              <EnquiryForm
+                leadType="epc_enquiry"
+                showProjectFields
+                showTechnicalFields
+                heading={t.doors.formHeading}
+                submitLabel={t.doors.formHeading}
+              />
+            </div>
+          </div>
+        )}
+      </div>
+    </>
   );
 }

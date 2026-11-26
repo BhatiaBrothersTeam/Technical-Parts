@@ -1,30 +1,32 @@
 import type { Metadata } from "next";
+import { Inter, Manrope } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/Header";
-import { getCategories } from "@/lib/data";
 import { Footer } from "@/components/Footer";
 import { RfqProvider } from "@/lib/rfq-context";
 import { ToastProvider } from "@/lib/toast-context";
 
 export const metadata: Metadata = {
   title: {
-    default: "technicalparts.com | EPC Packages & Fabrication",
+    default: "technicalparts.com | C&J Fabrication & EPC Packages",
     template: "%s | technicalparts.com",
   },
   description:
-    "BB Group's enquiry-led website for oil and gas EPC fabricated packages and C&J fabrication across the Middle East and beyond.",
+    "BB Group's enquiry-led website for C&J fabricated packages and EPC packages across the Middle East and beyond.",
 };
 
-export const revalidate = 300;
+const body = Inter({ subsets: ["latin"], variable: "--font-body", display: "swap" });
+const heading = Manrope({ subsets: ["latin"], variable: "--font-heading", display: "swap" });
 
-export default async function RootLayout({ children }: LayoutProps<"/">) {
-  const categories = await getCategories();
+export const revalidate = 60;
+
+export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" dir="ltr" className="h-full antialiased">
+    <html lang="en" dir="ltr" className={`${body.variable} ${heading.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
         <RfqProvider>
           <ToastProvider>
-            <Header categories={categories} />
+            <Header />
             <main className="flex-1">{children}</main>
             <Footer />
           </ToastProvider>

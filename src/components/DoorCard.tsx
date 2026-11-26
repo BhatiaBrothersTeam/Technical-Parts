@@ -13,20 +13,28 @@ interface DoorCardProps {
 
 export function DoorCard({ icon: Icon, image, title, description, href, cta }: DoorCardProps) {
   return (
-    <div className="card overflow-hidden flex flex-col hover:shadow-md hover:border-tp-blue/40 transition-shadow">
-      <div className="relative aspect-[4/3]">
-        <Image src={image} alt="" fill className="object-cover" sizes="(max-width: 640px) 50vw, 25vw" />
-      </div>
-      <div className="p-6 flex flex-col flex-1">
-        <div className="h-10 w-10 rounded-lg bg-tp-blue-light text-tp-blue flex items-center justify-center mb-3">
+    <Link
+      href={href}
+      className="group relative flex min-h-[22rem] overflow-hidden rounded-2xl shadow-md hover:shadow-lg transition-shadow"
+    >
+      <Image
+        src={image}
+        alt=""
+        fill
+        className="object-cover group-hover:scale-105 transition-transform duration-500"
+        sizes="(max-width: 640px) 100vw, 50vw"
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-tp-navy-dark via-tp-navy/70 to-tp-navy/10" />
+      <div className="relative mt-auto p-7 md:p-8 text-white w-full">
+        <div className="h-11 w-11 rounded-xl bg-white/15 backdrop-blur text-white flex items-center justify-center mb-4 ring-1 ring-white/20">
           <Icon className="h-5 w-5" />
         </div>
-        <h3 className="font-bold text-tp-navy mb-1.5">{title}</h3>
-        <p className="text-sm text-[var(--tp-neutral-600)] flex-1">{description}</p>
-        <Link href={href} className="link-blue text-sm mt-4 inline-flex items-center gap-1">
-          {cta} <span aria-hidden>&rarr;</span>
-        </Link>
+        <h3 className="text-2xl font-extrabold text-white mb-2">{title}</h3>
+        <p className="text-sm text-white/80 mb-5 max-w-md">{description}</p>
+        <span className="inline-flex items-center gap-2 text-sm font-semibold text-tp-navy-dark bg-tp-accent rounded-lg px-4 py-2 group-hover:bg-[#ffb83d] transition-colors">
+          {cta} <span aria-hidden className="transition-transform group-hover:translate-x-1">&rarr;</span>
+        </span>
       </div>
-    </div>
+    </Link>
   );
 }

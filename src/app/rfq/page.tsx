@@ -3,6 +3,7 @@
 import { useState, type FormEvent } from "react";
 import { t } from "@/lib/locale";
 import { UploadDropzone } from "@/components/UploadDropzone";
+import { PageHero } from "@/components/PageHero";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
@@ -48,12 +49,14 @@ export default function RfqUploadPage() {
   }
 
   return (
+    <>
+    <PageHero
+      eyebrow="Request a quote"
+      title={<>{t.rfqUpload.title} <span className="text-tp-accent">{t.rfqUpload.subtitle}</span></>}
+      subtitle={t.rfqUpload.copy}
+      crumbs={[{ label: "Upload RFQ" }]}
+    />
     <div className="container-tp section-y max-w-3xl">
-      <h1 className="text-3xl font-bold mb-1">
-        {t.rfqUpload.title} <span className="text-tp-blue">{t.rfqUpload.subtitle}</span>
-      </h1>
-      <p className="text-[var(--tp-neutral-600)] mb-8 max-w-xl">{t.rfqUpload.copy}</p>
-
       <form onSubmit={handleSubmit} className="space-y-6">
         {status === "error" && (
           <div className="rounded-lg bg-red-50 border border-red-200 text-red-700 px-4 py-3 text-sm">
@@ -104,5 +107,6 @@ export default function RfqUploadPage() {
         </div>
       </form>
     </div>
+    </>
   );
 }

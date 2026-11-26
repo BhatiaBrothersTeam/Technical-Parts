@@ -2,12 +2,12 @@
 
 BB Group's enquiry-led industrial B2B website, focused on two divisions:
 
-- **EPC Packages** — 24 fabricated package types for oil and gas EPC projects,
-  in four groups (Piping & Plant Works, Process Vessels & Exchangers, Skids &
-  Manifolds, Safety, Marine & Utilities).
-- **C&J Fabrication** — capability-led fabrication to the customer's drawings.
-  *"C&J" is not defined in the source documents, so the page uses placeholder
-  text that is clearly marked. Confirm what C&J stands for and replace it.*
+- **C&J Fabrication** (`/fabrication`) — the packages uploaded to WooCommerce
+  (brand "C&J Gulf Equipment Manufacturing L.L.C.", SKUs `CJ-PKG-nnn`). Any
+  product whose brand contains "C&J" is shown here and only here.
+- **EPC Packages** (`/epc`) — no packages uploaded yet, so the page shows a
+  "coming soon" message and an enquiry form. Products without the C&J brand
+  appear here automatically once added to WooCommerce.
 
 Not a webshop: a "My RFQ" basket, an Upload RFQ page, division and contact
 enquiry forms. Every submission is saved and returns a `TP-YYYYMMDD-XXXX` lead
@@ -30,7 +30,7 @@ removed.
 - **Data layer:** every read goes through `src/lib/data`. With
   `WOOCOMMERCE_STORE_URL` set, packages and groups come from WooCommerce
   (`src/lib/woocommerce.ts`): REST API with a read-only key, falling back to
-  the public Store API, cached 5 minutes and refreshed instantly by a
+  the public Store API, cached 1 minute and refreshed instantly by a
   WooCommerce webhook (`/api/revalidate`). If WooCommerce is unreachable the
   catalogue is empty (never silently replaced by sample data). With the URL
   empty, the bundled sample JSON in `src/lib/data/*.json` is used.
@@ -54,17 +54,14 @@ No environment variables are needed for the sample-data demo. Copy
 `.env.example` to `.env.local` and fill it in to use a real WordPress site.
 Restart after changing it; production builds read it at build time.
 
-## Load the EPC packages into WooCommerce
+## Adding products in WooCommerce
 
-`content/woocommerce-packages.csv` holds the 24 packages (SKU `EPC-01` to
-`EPC-24`, with groups as categories).
-
-1. WooCommerce > Products > **Import**, choose the CSV, map columns
-   automatically, run the import.
-2. Delete any products that do not belong to these divisions.
-3. Edit descriptions, add photos and attributes in WooCommerce. Leave prices
-   empty. The site picks up changes within 5 minutes, or instantly with the
-   webhook below.
+- **C&J packages:** set the product **Brand** to a name containing "C&J". They
+  appear on `/fabrication`.
+- **EPC packages:** add products with any other brand (or none). They appear on
+  `/epc`, grouped by their WooCommerce category. None are uploaded yet.
+- Leave prices empty. Changes show within about a minute, or instantly with the
+  webhook below.
 
 ## Connect WooCommerce (Hostinger)
 

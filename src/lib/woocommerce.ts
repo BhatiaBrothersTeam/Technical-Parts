@@ -6,7 +6,7 @@ export const CATALOGUE_TAG = "catalogue";
 
 const PAGE_SIZE = 100;
 const MAX_PAGES = 20;
-const REVALIDATE_SECONDS = 300;
+const REVALIDATE_SECONDS = 60;
 const FETCH_TIMEOUT_MS = 15000;
 
 const CATEGORY_FALLBACK_IMAGE: Record<string, string> = {
@@ -214,7 +214,7 @@ function primaryCategory(raw: RawProduct): { name: string; slug: string } {
 
 function toProduct(raw: RawProduct): Product {
   const categorySlug = primaryCategory(raw).slug;
-  const brand = raw.brands[0]?.name || attributeValue(raw, "Brand", "Manufacturer");
+  const brand = plainText(raw.brands[0]?.name || attributeValue(raw, "Brand", "Manufacturer"));
   const description = plainText(raw.short_description) || plainText(raw.description);
   const images = raw.images.map((i) => i.src).filter((src) => src && usableImage(src));
 

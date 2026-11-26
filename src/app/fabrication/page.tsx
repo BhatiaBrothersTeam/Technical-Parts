@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { getDoors, getProductsBySlugs } from "@/lib/data";
+import { CJ_BRAND, getCjCategories, getDoors, getProductsByBrand } from "@/lib/data";
 import { DoorPageHero } from "@/components/DoorPageHero";
 import { IconBlueprint, IconShieldCheck, IconTool } from "@/components/icons";
 import { t } from "@/lib/locale";
@@ -8,24 +8,17 @@ import { t } from "@/lib/locale";
 export const metadata: Metadata = {
   title: "C&J Fabrication",
   description:
-    "Capability-led fabrication for EPC and industrial projects. Review our capability, then send your RFQ or drawing for review.",
+    "C&J fabricated packages for oil and gas and industrial projects. Browse the packages, then send your RFQ or drawing for review.",
 };
-
-const relatedSlugs = [
-  "structural-module-work",
-  "pipe-rack-plant-shelter",
-  "process-power-underground-piping-packages",
-  "heat-exchangers",
-];
 
 export default async function FabricationPage() {
   const door = getDoors().find((d) => d.id === "cj")!;
-  const products = await getProductsBySlugs(relatedSlugs, 4);
+  // Only C&J products (brand match) are listed here; EPC packages stay on /epc.
+  const [products, categories] = await Promise.all([getProductsByBrand(CJ_BRAND), getCjCategories()]);
 
   return (
     <>
       <DoorPageHero
-        icon={IconBlueprint}
         title={door.title}
         intro={door.intro}
         points={door.points}
@@ -34,48 +27,51 @@ export default async function FabricationPage() {
         showProjectFields
         showTechnicalFields
         products={products}
-        productsHeading="Related EPC packages"
+        categories={categories}
+        productsHeading="C&J Fabrication Packages"
       />
 
-      <section className="bg-[var(--tp-neutral-50)] section-y">
-        <div className="container-tp grid md:grid-cols-3 gap-6">
-          <div className="card p-6">
-            <div className="h-10 w-10 rounded-lg bg-tp-blue-light text-tp-blue flex items-center justify-center mb-3">
-              <IconTool className="h-5 w-5" />
+      <section className="section-y">
+        <div className="container-tp">
+          <div className="grid md:grid-cols-3 gap-6">
+            <div className="card card-hover p-7">
+              <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-tp-blue to-tp-navy text-white flex items-center justify-center mb-4 shadow-md">
+                <IconTool className="h-6 w-6" />
+              </div>
+              <h2 className="text-lg font-extrabold text-tp-navy mb-3">{t.fabrication.capabilityHeading}</h2>
+              <ul className="text-sm text-[var(--tp-neutral-700)] space-y-2 list-disc ps-5 mb-4">
+                {t.fabrication.capabilityItems.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+              <span className="badge-sample">{t.common.sample}</span>
+              <p className="text-xs text-[var(--tp-neutral-600)] mt-2">{t.fabrication.capabilityPlaceholder}</p>
             </div>
-            <h2 className="font-bold text-tp-navy mb-2">{t.fabrication.capabilityHeading}</h2>
-            <ul className="text-sm text-[var(--tp-neutral-700)] space-y-1.5 list-disc ps-5 mb-3">
-              {t.fabrication.capabilityItems.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-            <span className="badge-sample">{t.common.sample}</span>
-            <p className="text-xs text-[var(--tp-neutral-600)] mt-2">{t.fabrication.capabilityPlaceholder}</p>
+
+            <div className="card card-hover p-7">
+              <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-tp-blue to-tp-navy text-white flex items-center justify-center mb-4 shadow-md">
+                <IconBlueprint className="h-6 w-6" />
+              </div>
+              <h2 className="text-lg font-extrabold text-tp-navy mb-3">{t.fabrication.referenceHeading}</h2>
+              <span className="badge-sample">{t.common.sample}</span>
+              <p className="text-xs text-[var(--tp-neutral-600)] mt-2">{t.fabrication.referencePlaceholder}</p>
+            </div>
+
+            <div className="card card-hover p-7">
+              <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-tp-blue to-tp-navy text-white flex items-center justify-center mb-4 shadow-md">
+                <IconShieldCheck className="h-6 w-6" />
+              </div>
+              <h2 className="text-lg font-extrabold text-tp-navy mb-3">{t.fabrication.codesHeading}</h2>
+              <span className="badge-sample">{t.common.sample}</span>
+              <p className="text-xs text-[var(--tp-neutral-600)] mt-2">{t.fabrication.codesPlaceholder}</p>
+            </div>
           </div>
 
-          <div className="card p-6">
-            <div className="h-10 w-10 rounded-lg bg-tp-blue-light text-tp-blue flex items-center justify-center mb-3">
-              <IconBlueprint className="h-5 w-5" />
-            </div>
-            <h2 className="font-bold text-tp-navy mb-2">{t.fabrication.referenceHeading}</h2>
-            <span className="badge-sample">{t.common.sample}</span>
-            <p className="text-xs text-[var(--tp-neutral-600)] mt-2">{t.fabrication.referencePlaceholder}</p>
+          <div className="mt-8 text-center">
+            <Link href="/rfq" className="link-blue">
+              {t.fabrication.uploadCta} &rarr;
+            </Link>
           </div>
-
-          <div className="card p-6">
-            <div className="h-10 w-10 rounded-lg bg-tp-blue-light text-tp-blue flex items-center justify-center mb-3">
-              <IconShieldCheck className="h-5 w-5" />
-            </div>
-            <h2 className="font-bold text-tp-navy mb-2">{t.fabrication.codesHeading}</h2>
-            <span className="badge-sample">{t.common.sample}</span>
-            <p className="text-xs text-[var(--tp-neutral-600)] mt-2">{t.fabrication.codesPlaceholder}</p>
-          </div>
-        </div>
-
-        <div className="container-tp mt-8">
-          <Link href="/rfq" className="link-blue text-sm">
-            {t.fabrication.uploadCta} &rarr;
-          </Link>
         </div>
       </section>
     </>

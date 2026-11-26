@@ -5,8 +5,8 @@ import { t } from "@/lib/locale";
 import type { LeadType } from "@/lib/types";
 
 const enquiryTypeOptions = [
-  "EPC Packages",
   "C&J Fabrication",
+  "EPC Packages",
   "RFQ",
   "Project requirement",
   "Technical Support",
@@ -88,7 +88,7 @@ export function EnquiryForm({
 
   if (status === "success" && leadId) {
     return (
-      <div className="card p-6 text-center bg-tp-blue-light border-tp-blue">
+      <div className="card p-8 text-center bg-tp-blue-light border-tp-blue shadow-md">
         <h3 className="text-xl font-bold text-tp-navy mb-1">{t.myRfq.successHeading}</h3>
         <p className="text-[var(--tp-neutral-600)] mb-3">{t.myRfq.successCopy}</p>
         <p className="text-sm text-[var(--tp-neutral-600)]">{t.myRfq.yourRfqId}</p>
@@ -98,8 +98,12 @@ export function EnquiryForm({
   }
 
   return (
-    <form onSubmit={handleSubmit} className="card p-6 space-y-4" noValidate>
-      {heading && <h3 className="text-lg font-bold text-tp-navy">{heading}</h3>}
+    <form
+      onSubmit={handleSubmit}
+      className="card p-6 md:p-8 space-y-5 shadow-md border-t-4 border-t-tp-blue"
+      noValidate
+    >
+      {heading && <h3 className="text-xl font-extrabold text-tp-navy">{heading}</h3>}
 
       {status === "error" && (
         <div className="rounded-lg bg-red-50 border border-red-200 text-red-700 px-4 py-3 text-sm">
@@ -194,7 +198,7 @@ export function EnquiryForm({
         </div>
       </div>
 
-      <button type="submit" className="btn btn-primary w-full sm:w-auto" disabled={status === "submitting"}>
+      <button type="submit" className="btn btn-primary w-full" disabled={status === "submitting"}>
         {status === "submitting" ? t.myRfq.submitting : submitLabel ?? t.doors.formHeading}
       </button>
     </form>

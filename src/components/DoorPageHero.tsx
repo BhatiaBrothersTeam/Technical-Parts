@@ -1,13 +1,14 @@
-import Image from "next/image";
 import Link from "next/link";
 import type { ComponentType, SVGProps } from "react";
 import { t } from "@/lib/locale";
 import { EnquiryForm } from "@/components/EnquiryForm";
+import { PageHero } from "@/components/PageHero";
 import { ProductCard } from "@/components/ProductCard";
-import type { LeadType, Product } from "@/lib/types";
+import { IconShieldCheck } from "@/components/icons";
+import type { Category, LeadType, Product } from "@/lib/types";
 
 interface DoorPageHeroProps {
-  icon: ComponentType<SVGProps<SVGSVGElement>>;
+  icon?: ComponentType<SVGProps<SVGSVGElement>>;
   title: string;
   intro: string;
   points: string[];
@@ -17,10 +18,12 @@ interface DoorPageHeroProps {
   showTechnicalFields?: boolean;
   products?: Product[];
   productsHeading?: string;
+  categories?: Category[];
+  viewAllHref?: string;
+  viewAllLabel?: string;
 }
 
 export function DoorPageHero({
-  icon: Icon,
   title,
   intro,
   points,
@@ -30,88 +33,112 @@ export function DoorPageHero({
   showTechnicalFields,
   products,
   productsHeading,
+  categories,
+  viewAllHref,
+  viewAllLabel,
 }: DoorPageHeroProps) {
-  return (
-    <div className="container-tp section-y">
-      <div className="grid lg:grid-cols-5 gap-10">
-        <div className="lg:col-span-3">
-          <div className="h-12 w-12 rounded-lg bg-tp-blue-light text-tp-blue flex items-center justify-center mb-4">
-            <Icon className="h-6 w-6" />
-          </div>
-          <h1 className="text-3xl font-bold text-tp-navy mb-1">{title}</h1>
-          <span className="badge-sample mb-4 inline-flex">{t.doors.sampleNotice}</span>
-          <p className="text-[var(--tp-neutral-600)] max-w-xl mb-6">{intro}</p>
-          <ul className="space-y-3">
-            {points.map((point) => (
-              <li key={point} className="flex items-start gap-3 text-tp-navy">
-                <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-tp-blue shrink-0" />
-                <span>{point}</span>
-              </li>
-            ))}
-          </ul>
+  const hasProducts = !!products && products.length > 0;
 
-          {products && products.length > 0 && (
-            <div className="mt-8">
-              <p className="form-label">{productsHeading ?? "Related products"}</p>
-              <div className="grid sm:grid-cols-2 gap-3">
-                {products.slice(0, 2).map((product) => (
-                  <Link
-                    key={product.id}
-                    href={`/epc/${product.category}/${product.slug}`}
-                    className="card flex items-center gap-3 p-3 hover:border-tp-blue/40 hover:shadow-md transition-shadow"
-                  >
-                    <div className="relative h-14 w-14 shrink-0 rounded-md overflow-hidden bg-tp-blue-light">
-                      <Image
-                        src={product.images[0]}
-                        alt={product.name}
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
-                    <div className="min-w-0">
-                      {product.part_number && (
-                        <p className="text-xs font-semibold text-tp-blue uppercase tracking-wide truncate">
-                          {product.part_number}
-                        </p>
-                      )}
-                      <p className="text-sm font-semibold text-tp-navy truncate">{product.name}</p>
-                      <span className="link-blue text-xs">{t.products.requestPrice} &rarr;</span>
-                    </div>
-                  </Link>
-                ))}
+  return (
+    <>
+      <PageHero eyebrow="Division" title={title} subtitle={intro} crumbs={[{ label: title }]}>
+        <a href="#enquiry" className="btn btn-accent">
+          {ctaLabel} <span aria-hidden>&darr;</span>
+        </a>
+        {hasProducts && (
+          <a href="#related-products" className="btn btn-outline">
+            Browse {products.length} packages
+          </a>
+        )}
+      </PageHero>
+
+      <div className="container-tp section-y">
+        <div className="grid lg:grid-cols-5 gap-10 items-start">
+          <div className="lg:col-span-3">
+            <h2 className="section-title mb-6">What you get</h2>
+            <ul className="grid sm:grid-cols-2 gap-4">
+              {points.map((point) => (
+                <li key={point} className="card card-hover p-5 flex items-start gap-3">
+                  <span className="h-9 w-9 shrink-0 rounded-lg bg-tp-blue-light text-tp-blue flex items-center justify-center">
+                    <IconShieldCheck className="h-5 w-5" />
+                  </span>
+                  <span className="text-sm font-medium text-tp-navy">{point}</span>
+                </li>
+              ))}
+            </ul>
+
+            {categories && categories.length > 0 && (
+              <div className="mt-10">
+                <p className="eyebrow mb-4">Browse by category</p>
+                <div className="flex flex-wrap gap-2">
+                  {categories.map((c) => (
+                    <a
+                      key={c.slug}
+                      href={`#${c.slug}`}
+                      className="text-sm font-semibold text-tp-navy bg-white border border-[var(--tp-neutral-200)] hover:border-tp-blue hover:text-tp-blue shadow-sm transition-colors rounded-full px-4 py-2"
+                    >
+                      {c.name}
+                    </a>
+                  ))}
+                </div>
               </div>
-              <a href="#related-products" className="link-blue text-sm mt-3 inline-block">
-                See all {products.length} &rarr;
-              </a>
-            </div>
-          )}
-        </div>
-        <div className="lg:col-span-2">
-          <EnquiryForm
-            leadType={leadType}
-            heading={t.doors.formHeading}
-            showProjectFields={showProjectFields}
-            showTechnicalFields={showTechnicalFields}
-            submitLabel={ctaLabel}
-          />
+            )}
+          </div>
+
+          <div id="enquiry" className="lg:col-span-2 scroll-mt-40">
+            <EnquiryForm
+              leadType={leadType}
+              heading={t.doors.formHeading}
+              showProjectFields={showProjectFields}
+              showTechnicalFields={showTechnicalFields}
+              submitLabel={ctaLabel}
+            />
+          </div>
         </div>
       </div>
 
-      {products && products.length > 0 && (
-        <div id="related-products" className="mt-16 scroll-mt-24">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-bold text-tp-navy">{productsHeading ?? "Related Products"}</h2>
-            <Link href="/epc" className="link-blue text-sm">
-              {t.home.viewAllPackages}
-            </Link>
+      {hasProducts && (
+        <section id="related-products" className="bg-[var(--tp-neutral-50)] section-y scroll-mt-24">
+          <div className="container-tp">
+            <div className="flex items-end justify-between mb-8 gap-4">
+              <div>
+                <p className="eyebrow mb-3">Catalogue</p>
+                <h2 className="section-title">{productsHeading ?? "Related Products"}</h2>
+              </div>
+              {viewAllHref && (
+                <Link href={viewAllHref} className="link-blue text-sm">
+                  {viewAllLabel ?? t.home.viewAllPackages}
+                </Link>
+              )}
+            </div>
+            {(() => {
+              const order = new Map((categories ?? []).map((c, i) => [c.slug, i]));
+              const names = new Map((categories ?? []).map((c) => [c.slug, c.name]));
+              const sorted = [...products].sort(
+                (x, y) => (order.get(x.category) ?? 999) - (order.get(y.category) ?? 999)
+              );
+              const seen = new Set<string>();
+              return (
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5">
+                  {sorted.map((product) => {
+                    const first = !seen.has(product.category);
+                    seen.add(product.category);
+                    return (
+                      <div
+                        key={product.id}
+                        id={first ? product.category : undefined}
+                        className="scroll-mt-40 [&>div]:h-full"
+                      >
+                        <ProductCard product={product} categoryName={names.get(product.category)} />
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            })()}
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-5">
-            {products.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
-        </div>
+        </section>
       )}
-    </div>
+    </>
   );
 }

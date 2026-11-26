@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getCategoryBySlug, getProductsByCategory } from "@/lib/data";
+import { getCategoryBySlug, getEpcProducts } from "@/lib/data";
+import { normalizeSlug } from "@/lib/woocommerce";
 import { t } from "@/lib/locale";
+import { PageHero } from "@/components/PageHero";
 import { ProductsBrowser } from "@/components/ProductsBrowser";
 
 interface PageProps {
@@ -24,21 +25,22 @@ export default async function CategoryPage({ params }: PageProps) {
   const category = await getCategoryBySlug(slug);
   if (!category) notFound();
 
-  const products = await getProductsByCategory(slug);
+  // C&J products live on /fabrication, not in the EPC catalogue.
+  const wanted = normalizeSlug(slug);
+  const products = (await getEpcProducts()).filter((p) => normalizeSlug(p.category) === wanted);
+  if (products.length === 0) notFound();
 
   return (
-    <div className="container-tp section-y">
-      <nav className="text-sm text-[var(--tp-neutral-600)] mb-3" aria-label="Breadcrumb">
-        <Link href="/epc" className="link-blue">
-          {t.products.breadcrumbRoot}
-        </Link>{" "}
-        / {category.name}
-      </nav>
-      <h1 className="text-3xl font-bold mb-2">{category.name}</h1>
-      {category.description && (
-        <p className="text-[var(--tp-neutral-600)] mb-8 max-w-2xl">{category.description}</p>
-      )}
-      <ProductsBrowser products={products} categories={[category]} lockedCategory={slug} />
-    </div>
+    <>
+      <PageHero
+        eyebrow={t.products.breadcrumbRoot}
+        title={category.name}
+        subtitle={category.description || undefined}
+        crumbs={[{ label: t.products.breadcrumbRoot, href: "/epc" }, { label: category.name }]}
+      />
+      <div className="container-tp section-y">
+        <ProductsBrowser products={products} categories={[category]} lockedCategory={slug} />
+      </div>
+    </>
   );
 }
