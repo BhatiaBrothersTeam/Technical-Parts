@@ -21,6 +21,13 @@ for (const host of (process.env.WOOCOMMERCE_IMAGE_HOSTS ?? "").split(",")) {
 
 const nextConfig: NextConfig = {
   images: { remotePatterns },
+  experimental: {
+    // The production build cache stores the values of every env var the build
+    // reads (including WooCommerce keys and the bb-leads secret) in
+    // .next/cache. Hosts such as Netlify scan build files for secrets and fail
+    // the deploy, so do not write it. Dev keeps its own cache.
+    turbopackFileSystemCacheForBuild: false,
+  },
 };
 
 export default nextConfig;

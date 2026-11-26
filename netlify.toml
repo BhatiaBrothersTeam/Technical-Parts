@@ -1,0 +1,5 @@
+[build.environment]
+# The WooCommerce store address is not a secret: it is the public host of the
+# product photos, so it legitimately appears in the generated pages. The API
+# key, secret and bb-leads secret must stay secret and are NOT omitted here.
+SECRETS_SCAN_OMIT_KEYS = "WOOCOMMERCE_STORE_URL"
