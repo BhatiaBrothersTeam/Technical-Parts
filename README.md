@@ -78,7 +78,25 @@ Restart after changing it; production builds read it at build time.
    `epc_enquiry` and `cj_enquiry`) and set `BB_LEADS_ENDPOINT` /
    `BB_LEADS_PROXY_SECRET`. See `wordpress-plugin/bb-leads/README.md`.
 
-## Deploy
+## Deploy to Netlify
+
+1. Import the GitHub repository into Netlify using the Next.js framework
+   settings.
+2. In **Project configuration > Environment variables**, add
+   `WOOCOMMERCE_STORE_URL` and, if using the authenticated REST API, both
+   `WOOCOMMERCE_CONSUMER_KEY` and `WOOCOMMERCE_CONSUMER_SECRET`. Use the same
+   values as your local `.env.local`; that file is ignored by Git and is not
+   uploaded to Netlify. Never commit it or share the keys.
+3. If variable scopes are available, enable both **Builds** and **Functions**
+   for these variables. Add any other required variables from `.env.example`
+   for images, webhooks and leads as appropriate.
+4. Redeploy after changing environment variables. C&J products appear on
+   `/fabrication` and on the home page; other products appear on `/epc`.
+   Only published products are returned by the catalogue.
+5. If the catalogue is still empty, check the Netlify build and function logs
+   for WooCommerce errors and verify the store URL and API permissions.
+
+## Deploy to Vercel
 
 1. Push this repo to GitHub and import it into Vercel (Next.js preset).
 2. Set the variables from `.env.example` in the Vercel project, then redeploy.
