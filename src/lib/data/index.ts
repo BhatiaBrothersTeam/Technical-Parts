@@ -73,7 +73,7 @@ export async function getProductsByBrand(brand: string): Promise<Product[]> {
 /**
  * All packages EXCEPT those from a given brand. Used to keep the general EPC
  * catalogue free of packages that belong to a brand's own dedicated page
- * (e.g. C&J Gulf's packages live on /fabrication, not /epc).
+ * (e.g. C&J Gulf's packages live on /cj-packages, not /epc).
  */
 export async function getProductsExcludingBrand(brand: string): Promise<Product[]> {
   const unwanted = brand.trim().toLowerCase();

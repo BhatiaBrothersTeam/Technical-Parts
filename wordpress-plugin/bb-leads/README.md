@@ -24,9 +24,16 @@ WordPress. The Next.js server calls it with a shared secret.
 4. In the Next.js environment (Vercel project settings), set
    `BB_LEADS_ENDPOINT` to `https://your-wp-site/wp-json/bb-leads/v1/leads` and
    `BB_LEADS_PROXY_SECRET` to the same secret, then redeploy.
+   Optional: `define('BB_LEADS_SEND_CONFIRMATION', false);` stops the automatic
+   receipt email (see below).
 5. Configure working WordPress email (an SMTP plugin with an authenticated
    mailbox) so notification emails are delivered. Leads are saved even if
    email fails; the failure is written to the PHP error log.
+
+Every successful submission also sends the customer a short receipt email with
+their enquiry number (version 1.3.0). The text is fixed: nothing the visitor
+typed is echoed back, so the form cannot be used to send messages to other
+people's addresses.
 
 Leads appear under **Leads** in WP Admin. Each lead shows the contact details,
 requested items, attachments and a follow-up status (New, Assigned, Contacted,
@@ -45,7 +52,9 @@ Quoted, Follow-up, Won, Lost).
   `project`, `end_user`, `message`, `page_url`, `utm_*`, `items` (JSON array
   of `{product, brand, part_number, quantity, required_delivery, notes}`,
   max 100) and files in `files[]`.
-- Files: PDF, XLS/XLSX, DOC/DOCX, JPG, PNG; 25 MB each; up to 10. All files
+- Files: PDF, XLS/XLSX, DOC/DOCX, JPG, PNG; 25 MB each; up to 10. (The storefront
+  itself limits uploads to 4 MB in total because the hosting platform rejects
+  larger requests.) All files
   are validated before anything is saved. **A single invalid file rejects the
   whole request (400)**, so a customer is never told an RFQ was received when
   a file was dropped.

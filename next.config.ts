@@ -21,6 +21,13 @@ for (const host of (process.env.WOOCOMMERCE_IMAGE_HOSTS ?? "").split(",")) {
 
 const nextConfig: NextConfig = {
   images: { remotePatterns },
+  async redirects() {
+    // The C&J division used to live at /fabrication.
+    return [
+      { source: "/fabrication", destination: "/cj-packages", permanent: true },
+      { source: "/fabrication/:path*", destination: "/cj-packages/:path*", permanent: true },
+    ];
+  },
   experimental: {
     // The production build cache stores the values of every env var the build
     // reads (including WooCommerce keys and the bb-leads secret) in

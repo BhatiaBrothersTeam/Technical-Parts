@@ -6,7 +6,7 @@ export const CATALOGUE_TAG = "catalogue";
 
 const PAGE_SIZE = 100;
 const MAX_PAGES = 20;
-const REVALIDATE_SECONDS = 60;
+const REVALIDATE_SECONDS = 30;
 const FETCH_TIMEOUT_MS = 15000;
 
 const CATEGORY_FALLBACK_IMAGE: Record<string, string> = {
@@ -212,6 +212,31 @@ function primaryCategory(raw: RawProduct): { name: string; slug: string } {
   return { name: found.name, slug: normalizeSlug(found.slug) };
 }
 
+const INDUSTRY_PATTERNS: Record<string, RegExp> = {
+  "oil-gas": /oil\s*(?:&|and)\s*gas/i,
+  petrochemical: /petrochem|chemical/i,
+  power: /\bpower\b/i,
+  "water-wastewater": /water|wastewater/i,
+  manufacturing: /manufactur/i,
+  marine: /marine|offshore/i,
+};
+
+/**
+ * Industries a product serves: tags that match an industry slug, plus any
+ * industry named in the product's own name or description text.
+ */
+function industriesFor(raw: RawProduct): string[] {
+  const text = plainText(`${raw.name} ${raw.short_description} ${raw.description}`);
+  const found = new Set<string>();
+  for (const tag of raw.tags) {
+    if (tag.slug in INDUSTRY_PATTERNS) found.add(tag.slug);
+  }
+  for (const [slug, pattern] of Object.entries(INDUSTRY_PATTERNS)) {
+    if (pattern.test(text)) found.add(slug);
+  }
+  return [...found];
+}
+
 function toProduct(raw: RawProduct): Product {
   const categorySlug = primaryCategory(raw).slug;
   const brand = plainText(raw.brands[0]?.name || attributeValue(raw, "Brand", "Manufacturer"));
@@ -230,7 +255,7 @@ function toProduct(raw: RawProduct): Product {
     specifications: raw.attributes
       .filter((a) => !SPEC_EXCLUDED.has(a.name.toLowerCase()) && a.options.length > 0)
       .map((a) => ({ label: plainText(a.name), value: a.options.map(plainText).join(", ") })),
-    industries: raw.tags.map((t) => t.slug),
+    industries: industriesFor(raw),
     images: images.length > 0 ? images : [CATEGORY_FALLBACK_IMAGE[categorySlug] ?? DEFAULT_FALLBACK_IMAGE],
   };
 }

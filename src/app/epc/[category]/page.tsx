@@ -25,7 +25,7 @@ export default async function CategoryPage({ params }: PageProps) {
   const category = await getCategoryBySlug(slug);
   if (!category) notFound();
 
-  // C&J products live on /fabrication, not in the EPC catalogue.
+  // C&J products live on /cj-packages, not in the EPC catalogue.
   const wanted = normalizeSlug(slug);
   const products = (await getEpcProducts()).filter((p) => normalizeSlug(p.category) === wanted);
   if (products.length === 0) notFound();

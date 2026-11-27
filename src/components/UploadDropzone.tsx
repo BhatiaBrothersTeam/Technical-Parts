@@ -4,7 +4,13 @@ import { useCallback, useId, useRef, useState, type DragEvent } from "react";
 import { t } from "@/lib/locale";
 import { IconUpload } from "@/components/icons";
 
-export const ACCEPTED_EXTENSIONS = [".pdf", ".xls", ".xlsx", ".doc", ".docx", ".jpg", ".jpeg", ".png"];
+import {
+  ACCEPTED_EXTENSIONS,
+  MAX_FILES,
+  MAX_TOTAL_BYTES,
+  isAllowedFileName,
+  totalBytes,
+} from "@/lib/upload-limits";
 
 // Extensions alone aren't always enough for mobile browsers to offer the
 // camera/photo-library picker on an <input type="file">; MIME types make
@@ -18,13 +24,6 @@ const ACCEPTED_MIME_TYPES = [
   "image/jpeg",
   "image/png",
 ];
-export const MAX_FILE_SIZE = 25 * 1024 * 1024; // 25MB
-
-function isAllowed(file: File) {
-  const name = file.name.toLowerCase();
-  return ACCEPTED_EXTENSIONS.some((ext) => name.endsWith(ext));
-}
-
 interface UploadDropzoneProps {
   files: File[];
   onFilesChange: (files: File[]) => void;
@@ -41,17 +40,26 @@ export function UploadDropzone({ files, onFilesChange, onRejected, compact }: Up
     (incoming: FileList | null) => {
       if (!incoming) return;
       const next = [...files];
+      let used = totalBytes(next);
+      let message: string | null = null;
       for (const file of Array.from(incoming)) {
-        if (!isAllowed(file)) {
-          onRejected?.(`${file.name} ${t.rfqUpload.fileTypeNotAllowed}`);
+        if (!isAllowedFileName(file.name)) {
+          message = `${file.name} ${t.rfqUpload.fileTypeNotAllowed}`;
           continue;
         }
-        if (file.size > MAX_FILE_SIZE) {
-          onRejected?.(`${file.name} ${t.rfqUpload.fileTooLarge}`);
+        if (next.length >= MAX_FILES) {
+          message = `You can attach up to ${MAX_FILES} files.`;
+          continue;
+        }
+        if (used + file.size > MAX_TOTAL_BYTES) {
+          message = `${file.name} ${t.rfqUpload.fileTooLarge}`;
           continue;
         }
         next.push(file);
+        used += file.size;
       }
+      // Clear any earlier warning when everything was accepted.
+      onRejected?.(message ?? "");
       onFilesChange(next);
     },
     [files, onFilesChange, onRejected]

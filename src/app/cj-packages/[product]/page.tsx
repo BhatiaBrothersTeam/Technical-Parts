@@ -13,7 +13,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const product = await getProductBySlug(slug);
   if (!product || !isCjProduct(product)) return {};
   return {
-    title: `${product.name} | C&J Fabrication`,
+    title: `${product.name} | C&J Packages`,
     description: product.description || `${product.name}. Send your requirement to technicalparts.com.`,
   };
 }
@@ -32,8 +32,8 @@ export default async function CjProductPage({ params }: PageProps) {
       product={product}
       related={related}
       leadType="cj_enquiry"
-      rootHref="/fabrication"
-      rootLabel="C&J Fabrication"
+      rootHref="/cj-packages"
+      rootLabel="C&J Packages"
     />
   );
 }

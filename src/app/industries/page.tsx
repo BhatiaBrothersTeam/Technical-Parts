@@ -1,65 +1,75 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
-import { getIndustries } from "@/lib/data";
-import { t } from "@/lib/locale";
+import { CJ_BRAND, getIndustries, getProductsByBrand } from "@/lib/data";
 import { PageHero } from "@/components/PageHero";
-import { IconRig, IconFlask, IconBolt, IconDroplet, IconFactory, IconAnchor } from "@/components/icons";
 
 export const metadata: Metadata = {
   title: "Industries",
   description: "Industries served by technicalparts.com: Oil & Gas, Petrochemical, Power, Water & Wastewater, Manufacturing and Marine.",
 };
 
-const industryIcons = {
-  "oil-gas": IconRig,
-  petrochemical: IconFlask,
-  power: IconBolt,
-  "water-wastewater": IconDroplet,
-  manufacturing: IconFactory,
-  marine: IconAnchor,
+const industryImages: Record<string, string> = {
+  "oil-gas": "/images/photos/industry-oilgas.jpg",
+  petrochemical: "/images/photos/industry-petrochemical.jpg",
+  power: "/images/photos/industry-power.jpg",
+  "water-wastewater": "/images/photos/industry-water.jpg",
+  manufacturing: "/images/photos/industry-manufacturing.jpg",
+  marine: "/images/photos/industry-marine.jpg",
 };
 
-const industryCopy: Record<string, string> = {
-  "oil-gas": "Separators, manifolds, skids, tanks and flare systems for upstream, midstream and downstream facilities.",
-  petrochemical: "Fabricated vessels, skids and piping packages for petrochemical plants and process units.",
-  power: "Piping, structural and utility packages supporting power generation and utilities.",
-  "water-wastewater": "Tanks, mortar-lined piping and treatment packages for water and wastewater.",
-  manufacturing: "Fabricated structures, piping and equipment packages for industrial plants.",
-  marine: "Mooring buoys, sinkers and fabricated packages for marine and offshore applications.",
-};
-
-export default function IndustriesPage() {
+export default async function IndustriesPage() {
   const industries = getIndustries();
+  const products = await getProductsByBrand(CJ_BRAND);
+  const countFor = (slug: string) => products.filter((p) => p.industries.includes(slug)).length;
 
   return (
     <>
       <PageHero
-        eyebrow="Sectors"
         title="Industries We Serve"
-        subtitle="Solutions for demanding industries, backed by technical expertise and a trusted supply chain."
-        crumbs={[{ label: "Industries" }]}
+        subtitle="Choose an industry to see the C&J packages that serve it."
       />
       <div className="container-tp section-y">
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-14">
+        <div className="grid grid-cols-1 min-[480px]:grid-cols-2 lg:grid-cols-3 gap-6">
           {industries.map((industry) => {
-            const Icon = industryIcons[industry.slug as keyof typeof industryIcons];
-            return (
-              <div key={industry.id} id={industry.slug} className="card card-hover p-7 scroll-mt-40">
-                <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-tp-blue to-tp-navy text-white flex items-center justify-center mb-5 shadow-md">
-                  <Icon className="h-6 w-6" />
+            const count = countFor(industry.slug);
+            const body = (
+              <>
+                <Image
+                  src={industryImages[industry.slug]}
+                  alt=""
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  sizes="(max-width: 480px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-tp-navy-dark/90 via-tp-navy/25 to-transparent" />
+                <div className="absolute inset-x-0 bottom-0 p-5 flex items-end justify-between gap-3">
+                  <div>
+                    <span className="block h-0.5 w-8 bg-tp-accent mb-2 group-hover:w-14 transition-all" />
+                    <h2 className="text-lg font-extrabold text-white">{industry.name}</h2>
+                    {count > 0 && (
+                      <p className="text-sm text-white/80">
+                        {count} {count === 1 ? "package" : "packages"}
+                      </p>
+                    )}
+                  </div>
+                  <span aria-hidden className="text-tp-accent text-xl transition-transform group-hover:translate-x-1">
+                    &rarr;
+                  </span>
                 </div>
-                <h2 className="text-lg font-extrabold text-tp-navy mb-2">{industry.name}</h2>
-                <p className="text-sm text-[var(--tp-neutral-600)]">{industryCopy[industry.slug]}</p>
-              </div>
+              </>
+            );
+            const cls = "group relative block aspect-[16/10] rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow";
+            return count > 0 ? (
+              <Link key={industry.id} href={`/cj-packages?industry=${industry.slug}`} className={cls}>
+                {body}
+              </Link>
+            ) : (
+              <Link key={industry.id} href="/contact" className={cls}>
+                {body}
+              </Link>
             );
           })}
-        </div>
-
-        <div className="rounded-2xl p-8 bg-tp-blue-light border border-tp-blue/15 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <p className="text-tp-navy font-bold text-lg">Don&apos;t see your industry? We can still help.</p>
-          <Link href="/contact" className="btn btn-primary shrink-0">
-            {t.header.contactUs}
-          </Link>
         </div>
       </div>
     </>

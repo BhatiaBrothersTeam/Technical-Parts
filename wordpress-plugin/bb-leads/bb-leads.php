@@ -2,7 +2,7 @@
 /**
  * Plugin Name: BB Leads
  * Description: Lead capture for technicalparts.com. Receives RFQs, price requests and enquiries from the Next.js storefront (server-to-server only), stores them as bb_lead records with private attachments, and notifies the sales team.
- * Version: 1.2.0
+ * Version: 1.3.0
  * Author: BB Group
  * Text Domain: bb-leads
  */
@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('BB_LEADS_VERSION', '1.2.0');
+define('BB_LEADS_VERSION', '1.3.0');
 define('BB_LEADS_MAX_FILE_SIZE', 25 * 1024 * 1024);
 define('BB_LEADS_MAX_FILES', 10);
 define('BB_LEADS_MAX_ITEMS', 100);
@@ -25,6 +25,7 @@ define('BB_LEADS_ALLOWED_EXTENSIONS', ['pdf', 'xls', 'xlsx', 'doc', 'docx', 'jpg
  *   define('BB_LEADS_PROXY_SECRET', 'at-least-32-random-characters');
  * Optional:
  *   define('BB_LEADS_NOTIFY_EMAIL', 'sales@example.com'); // defaults to the site admin email
+ *   define('BB_LEADS_SEND_CONFIRMATION', false);           // stop emailing a receipt to the customer
  */
 
 function bb_leads_valid_types() {
@@ -373,6 +374,7 @@ function bb_leads_handle_submission(WP_REST_Request $request) {
     }
 
     bb_leads_notify($post_id, $lead_id, $meta, count($attachments));
+    bb_leads_confirm_to_customer($lead_id, $meta);
 
     return rest_ensure_response(['lead_id' => $lead_id]);
 }
@@ -413,6 +415,45 @@ function bb_leads_notify($post_id, $lead_id, array $meta, $attachment_count) {
     $sent = wp_mail($to, "New enquiry {$lead_id}", implode("\n", $lines), ['Reply-To: ' . $meta['email']]);
     if (!$sent) {
         error_log("[bb-leads] Notification email failed for {$lead_id}; the lead itself was saved.");
+    }
+}
+
+/**
+ * Receipt for the customer. Deliberately fixed text plus the enquiry number only:
+ * nothing the visitor typed is echoed back, so the form cannot be abused to send
+ * arbitrary messages to someone else's address.
+ */
+function bb_leads_confirm_to_customer($lead_id, array $meta) {
+    if (defined('BB_LEADS_SEND_CONFIRMATION') && !BB_LEADS_SEND_CONFIRMATION) {
+        return;
+    }
+    $to = $meta['email'];
+    if (!is_email($to)) {
+        return;
+    }
+    $reply_to = defined('BB_LEADS_NOTIFY_EMAIL') ? BB_LEADS_NOTIFY_EMAIL : get_option('admin_email');
+
+    $first = trim((string) strtok((string) $meta['name'], ' '));
+    $lines = [
+        $first !== '' ? "Hello {$first}," : 'Hello,',
+        '',
+        'Thank you for your enquiry. We have received it and our team will review it and get back to you.',
+        '',
+        "Your enquiry number: {$lead_id}",
+        'Please quote this number if you contact us about it.',
+        '',
+        'technicalparts.com | Part of BB Group',
+        '',
+        'This is an automatic receipt. If you did not send an enquiry, you can ignore this email.',
+    ];
+
+    $headers = [];
+    if (is_email($reply_to)) {
+        $headers[] = 'Reply-To: ' . $reply_to;
+    }
+    $sent = wp_mail($to, "We received your enquiry {$lead_id}", implode("\n", $lines), $headers);
+    if (!$sent) {
+        error_log("[bb-leads] Confirmation email failed for {$lead_id}.");
     }
 }
 

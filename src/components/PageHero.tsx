@@ -30,7 +30,7 @@ export function PageHero({ eyebrow, title, subtitle, crumbs, children }: PageHer
           </nav>
         )}
         {eyebrow && <p className="eyebrow eyebrow-light mb-3">{eyebrow}</p>}
-        <h1 className="text-3xl md:text-5xl font-extrabold max-w-3xl">{title}</h1>
+        <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold max-w-3xl break-words">{title}</h1>
         {subtitle && <p className="mt-4 max-w-2xl text-base md:text-lg text-white/75">{subtitle}</p>}
         {children && <div className="mt-6 flex flex-wrap gap-3">{children}</div>}
       </div>

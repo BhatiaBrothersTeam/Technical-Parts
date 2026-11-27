@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { appendLead, createLeadId, storeAttachment } from "@/lib/leads";
 import type { LeadPayload, LeadType, RfqLine } from "@/lib/types";
+import { MAX_FILES, MAX_TOTAL_BYTES, MAX_TOTAL_LABEL, isAllowedFileName, totalBytes } from "@/lib/upload-limits";
 
 const VALID_LEAD_TYPES: LeadType[] = [
   "price_request",
@@ -10,10 +11,9 @@ const VALID_LEAD_TYPES: LeadType[] = [
   "general_enquiry",
 ];
 
-const ALLOWED_EXTENSIONS = [".pdf", ".xls", ".xlsx", ".doc", ".docx", ".jpg", ".jpeg", ".png"];
-const MAX_FILE_BYTES = 25 * 1024 * 1024;
-const MAX_FILES = 10;
 const MAX_ITEMS = 100;
+/** A human fills the form in more than this; a script posts instantly. */
+const MIN_FILL_MS = 3000;
 
 class RequestError extends Error {
   constructor(message: string, readonly status = 400) {
@@ -82,13 +82,24 @@ function buildPayload(source: Record<string, unknown>): LeadPayload {
 function validateFiles(files: File[]) {
   if (files.length > MAX_FILES) throw new RequestError(`You can attach up to ${MAX_FILES} files`);
   for (const file of files) {
-    const name = file.name.toLowerCase();
-    if (!ALLOWED_EXTENSIONS.some((ext) => name.endsWith(ext))) {
-      throw new RequestError(`${file.name} is not an accepted file type`);
-    }
-    if (file.size > MAX_FILE_BYTES) throw new RequestError(`${file.name} exceeds the 25MB limit`);
+    if (!isAllowedFileName(file.name)) throw new RequestError(`${file.name} is not an accepted file type`);
     if (file.size === 0) throw new RequestError(`${file.name} is empty`);
   }
+  if (totalBytes(files) > MAX_TOTAL_BYTES) {
+    throw new RequestError(`Attachments are over the ${MAX_TOTAL_LABEL} total limit`, 413);
+  }
+}
+
+/**
+ * Cheap spam filter, no third-party service: the form carries a hidden field a
+ * person never fills in, and records how long it was open. Bots that fill every
+ * field or post straight to the API are dropped silently (they get a success
+ * response so they do not adapt).
+ */
+function looksLikeBot(source: Record<string, unknown>): boolean {
+  if (typeof source.hp_contact === "string" && source.hp_contact.trim() !== "") return true;
+  const elapsed = Number(source.elapsed_ms);
+  return !Number.isFinite(elapsed) || elapsed < MIN_FILL_MS;
 }
 
 function clientIp(req: NextRequest): string {
@@ -136,16 +147,20 @@ export async function POST(req: NextRequest) {
   const contentType = req.headers.get("content-type") || "";
 
   try {
-    let payload: LeadPayload;
     let files: File[] = [];
+    let source: Record<string, unknown>;
 
     if (contentType.includes("multipart/form-data")) {
       const form = await req.formData();
-      payload = buildPayload(Object.fromEntries(form.entries()));
+      source = Object.fromEntries(form.entries());
       files = form.getAll("files").filter((f): f is File => f instanceof File && f.size > 0);
     } else {
-      payload = buildPayload((await req.json()) as Record<string, unknown>);
+      source = (await req.json()) as Record<string, unknown>;
     }
+
+    if (looksLikeBot(source)) return NextResponse.json({ lead_id: "RECEIVED" });
+
+    const payload: LeadPayload = buildPayload(source);
     validateFiles(files);
 
     const endpoint = process.env.BB_LEADS_ENDPOINT;

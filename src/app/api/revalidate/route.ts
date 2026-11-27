@@ -16,7 +16,7 @@ function signatureMatches(body: string, signature: string, secret: string): bool
 
 /**
  * WooCommerce webhook target (product created/updated/deleted). Refreshes the
- * cached catalogue immediately instead of waiting for the 1-minute cache.
+ * cached catalogue immediately instead of waiting for the 30-second cache.
  * Verifies WooCommerce's X-WC-Webhook-Signature (HMAC-SHA256, base64).
  */
 export async function POST(req: NextRequest) {

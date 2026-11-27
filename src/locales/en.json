@@ -1,7 +1,7 @@
 {
   "brand": {
     "name": "technicalparts.com",
-    "tagline": "C&J fabrication & EPC packages",
+    "tagline": "C&J Packages & EPC Packages",
     "group": "Part of BB Group"
   },
   "header": {
@@ -15,8 +15,7 @@
     "nav": {
       "home": "Home",
       "packages": "EPC Packages",
-      "fabrication": "C&J Fabrication",
-      "projects": "Projects",
+      "fabrication": "C&J Packages",
       "industries": "Industries",
       "about": "About",
       "contact": "Contact"
@@ -24,12 +23,12 @@
   },
   "home": {
     "heroKicker": "Keeping projects moving",
-    "heroHeadline1": "C&J fabrication",
-    "heroHeadline2": "& EPC packages.",
+    "heroHeadline1": "C&J Packages",
+    "heroHeadline2": "& EPC Packages.",
     "heroHeadline3": "Built to your drawings.",
     "heroCopy": "Fabricated packages from C&J Gulf Equipment Manufacturing for oil and gas and industrial projects across the Middle East and beyond. Send your drawings and requirements for review.",
     "heroPrimaryCta": "Send an RFQ",
-    "heroSecondaryCta": "Explore Our Capabilities",
+    "heroSecondaryCta": "Browse C&J Packages",
     "trustBar": [
       { "title": "C&J Packages", "copy": "Piping, vessels, HVAC and more" },
       { "title": "Built to Specification", "copy": "Your drawings and codes" },
@@ -42,7 +41,7 @@
     "uploadCopy": "Upload your RFQ, BOQ, drawings or specification and our team will review your requirement.",
     "uploadDropText": "Drop your file here or",
     "uploadBrowseText": "Browse Files",
-    "uploadHelp": "PDF, Excel, Word, JPG or PNG (Max 25MB)",
+    "uploadHelp": "PDF, Excel, Word, JPG or PNG (max 4MB in total)",
     "uploadCta": "Submit Your RFQ",
     "uploadNeedHelp": "Need help? Contact our team",
     "supportingHeading": "Fabrication and project support",
@@ -58,7 +57,7 @@
     "industriesHeading": "Industries We Serve",
     "industriesCopy": "Packages and fabrication for demanding industrial projects.",
     "viewAllIndustries": "View all industries",
-    "capabilitiesHeading": "Fabrication Capability",
+    "capabilitiesHeading": "C&J Package Range",
     "capabilitiesCopy": "Browse the C&J package range, then send your drawings or RFQ for review.",
     "capabilitiesCta": "Browse C&J Packages",
     "supportHeading": "Need technical support or have a question?",
@@ -75,9 +74,9 @@
   "products": {
     "title": "EPC Packages",
     "intro": "Fabricated packages for oil and gas EPC projects. Submit your project requirement or add packages to your RFQ.",
-    "searchPlaceholder": "Search by package name or code...",
-    "filterCategory": "Package group",
-    "allCategories": "All Package Groups",
+    "searchPlaceholder": "Search packages...",
+    "filterCategory": "Category",
+    "allCategories": "All categories",
     "emptyHeading": "EPC packages coming soon",
     "emptyCopy": "Our EPC package catalogue is being prepared. Send your project requirement and our team will respond.",
     "noResults": "No packages match your search. Try a different keyword or group.",
@@ -126,11 +125,11 @@
   "rfqUpload": {
     "title": "Have drawings or an RFQ ready?",
     "subtitle": "Send them to us.",
-    "copy": "Upload your RFQ, BOQ, drawings or specification. We accept PDF, Excel, Word, JPG and PNG files up to 25MB.",
+    "copy": "Upload your RFQ, BOQ, drawings or specification. We accept PDF, Excel, Word, JPG and PNG files, up to 4MB in total. For larger files, send your enquiry and we will arrange a transfer.",
     "dropHeading": "Drop your file here",
     "dropOr": "or",
     "browseFiles": "Browse Files",
-    "maxSize": "Max 25MB per file",
+    "maxSize": "Max 4MB in total across all files",
     "selectedFiles": "Selected files",
     "remove": "Remove",
     "messageLabel": "Message",
@@ -141,7 +140,7 @@
     "yourRfqId": "Your RFQ ID",
     "errorHeading": "Upload Failed",
     "errorCopy": "We could not save your file. Please check your connection and try again.",
-    "fileTooLarge": "exceeds the 25MB limit and was not added.",
+    "fileTooLarge": "would take your files over the 4MB total limit and was not added. For larger files, send the enquiry first and we will arrange a transfer.",
     "fileTypeNotAllowed": "is not an accepted file type."
   },
   "form": {
@@ -183,16 +182,9 @@
     "submitHeading": "Submit an RFQ or drawing",
     "uploadCta": "Upload drawings instead"
   },
-  "projects": {
-    "title": "Projects",
-    "intro": "Reference projects for C&J fabrication and EPC packages.",
-    "placeholder": "Placeholder: verified reference projects will be listed here once approved. No project or customer is named until confirmed.",
-    "sampleNotice": "Sample section. No real project is shown yet.",
-    "cta": "Discuss your project"
-  },
   "about": {
     "title": "About Technicalparts.com",
-    "intro": "technicalparts.com is BB Group's enquiry-led website for C&J fabricated packages and EPC packages across the Middle East and beyond.",
+    "intro": "technicalparts.com is BB Group's enquiry-led website for C&J packages and EPC packages across the Middle East and beyond.",
     "sampleNotice": "Company details shown are placeholders pending confirmation."
   },
   "contact": {

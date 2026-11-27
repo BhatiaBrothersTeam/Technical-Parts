@@ -118,6 +118,13 @@
     }
   }
 
+  @media (min-width: 1536px) {
+    .container-tp {
+      max-width: 90rem;
+      padding-inline: 3rem;
+    }
+  }
+
   .section-y {
     padding-block: 4rem;
   }
@@ -211,6 +218,16 @@
     transform: translateY(-3px);
     box-shadow: var(--shadow-md);
     border-color: rgba(29, 95, 191, 0.35);
+  }
+
+  /* Spam trap: invisible to people, still present in the DOM for bots. */
+  .hp-field {
+    position: absolute;
+    left: -9999px;
+    top: auto;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
   }
 
   .badge-sample {

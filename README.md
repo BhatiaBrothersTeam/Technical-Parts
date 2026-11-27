@@ -1,8 +1,8 @@
-# technicalparts.com — EPC Packages & C&J Fabrication
+# technicalparts.com — EPC Packages & C&J Packages
 
 BB Group's enquiry-led industrial B2B website, focused on two divisions:
 
-- **C&J Fabrication** (`/fabrication`) — the packages uploaded to WooCommerce
+- **C&J Packages** (`/cj-packages`) — the packages uploaded to WooCommerce
   (brand "C&J Gulf Equipment Manufacturing L.L.C.", SKUs `CJ-PKG-nnn`). Any
   product whose brand contains "C&J" is shown here and only here.
 - **EPC Packages** (`/epc`) — no packages uploaded yet, so the page shows a
@@ -14,7 +14,7 @@ enquiry forms. Every submission is saved and returns a `TP-YYYYMMDD-XXXX` lead
 ID. No cart, no checkout, no prices.
 
 Pages: `/` · `/epc` · `/epc/[group]` · `/epc/[group]/[package]` ·
-`/fabrication` · `/projects` · `/industries` · `/about` · `/contact` · `/rfq` ·
+`/cj-packages` · `/projects` · `/industries` · `/about` · `/contact` · `/rfq` ·
 `/my-rfq`. The earlier MRO, Repair & AMC, Equipment and Brands pages were
 removed.
 
@@ -30,7 +30,7 @@ removed.
 - **Data layer:** every read goes through `src/lib/data`. With
   `WOOCOMMERCE_STORE_URL` set, packages and groups come from WooCommerce
   (`src/lib/woocommerce.ts`): REST API with a read-only key, falling back to
-  the public Store API, cached 1 minute and refreshed instantly by a
+  the public Store API, cached 30 seconds and refreshed instantly by a
   WooCommerce webhook (`/api/revalidate`). If WooCommerce is unreachable the
   catalogue is empty (never silently replaced by sample data). With the URL
   empty, the bundled sample JSON in `src/lib/data/*.json` is used.
@@ -57,10 +57,10 @@ Restart after changing it; production builds read it at build time.
 ## Adding products in WooCommerce
 
 - **C&J packages:** set the product **Brand** to a name containing "C&J". They
-  appear on `/fabrication`.
+  appear on `/cj-packages`.
 - **EPC packages:** add products with any other brand (or none). They appear on
   `/epc`, grouped by their WooCommerce category. None are uploaded yet.
-- Leave prices empty. Changes show within about a minute, or instantly with the
+- Leave prices empty. Changes show within about 30 seconds, or instantly with the
   webhook below.
 
 ## Connect WooCommerce (Hostinger)
@@ -91,7 +91,7 @@ Restart after changing it; production builds read it at build time.
    for these variables. Add any other required variables from `.env.example`
    for images, webhooks and leads as appropriate.
 4. Redeploy after changing environment variables. C&J products appear on
-   `/fabrication` and on the home page; other products appear on `/epc`.
+   `/cj-packages` and on the home page; other products appear on `/epc`.
    Only published products are returned by the catalogue.
 5. If the catalogue is still empty, check the Netlify build and function logs
    for WooCommerce errors and verify the store URL and API permissions.
@@ -106,7 +106,7 @@ Restart after changing it; production builds read it at build time.
 
 ## Placeholder content to replace before go-live
 
-- **C&J Fabrication** page: scope, capability, codes. Marked as placeholder.
+- **C&J Packages** page: scope, capability, codes. Marked as placeholder.
 - **Projects** page: reference projects and certifications are sample sections.
 - Home, About, Industries and footer contact details are sample text.
 - Package descriptions in the CSV are starting text; add real photos.

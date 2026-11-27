@@ -5,6 +5,8 @@ import { useState, type FormEvent } from "react";
 import { t } from "@/lib/locale";
 import { useRfq } from "@/lib/rfq-context";
 import { PageHero } from "@/components/PageHero";
+import { Honeypot, useFormTimer } from "@/components/SpamGuard";
+import { PrivacyNote } from "@/components/PrivacyNote";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
@@ -12,6 +14,7 @@ export default function MyRfqPage() {
   const { lines, updateLine, removeLine, clear } = useRfq();
   const [status, setStatus] = useState<Status>("idle");
   const [leadId, setLeadId] = useState<string | null>(null);
+  const elapsed = useFormTimer();
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -31,6 +34,8 @@ export default function MyRfqPage() {
       message: String(fd.get("message") || ""),
       items: lines,
       page_url: window.location.href,
+      hp_contact: String(fd.get("hp_contact") || ""),
+      elapsed_ms: elapsed(),
     };
 
     try {
@@ -57,7 +62,7 @@ export default function MyRfqPage() {
           <p className="text-[var(--tp-neutral-600)] mb-4">{t.myRfq.successCopy}</p>
           <p className="text-sm text-[var(--tp-neutral-600)]">{t.myRfq.yourRfqId}</p>
           <p className="text-3xl font-mono font-bold text-tp-blue mb-6">{leadId}</p>
-          <Link href="/fabrication" className="btn btn-primary">
+          <Link href="/cj-packages" className="btn btn-primary">
             {t.myRfq.browseProducts}
           </Link>
         </div>
@@ -71,14 +76,13 @@ export default function MyRfqPage() {
       eyebrow="Your enquiry"
       title={t.myRfq.title}
       subtitle={t.myRfq.subtitle}
-      crumbs={[{ label: t.myRfq.title }]}
     />
     <div className="container-tp section-y">
 
       {lines.length === 0 ? (
         <div className="card p-10 text-center">
           <p className="text-[var(--tp-neutral-600)] mb-4">{t.myRfq.empty}</p>
-          <Link href="/fabrication" className="btn btn-primary">
+          <Link href="/cj-packages" className="btn btn-primary">
             {t.myRfq.browseProducts}
           </Link>
         </div>
@@ -147,7 +151,7 @@ export default function MyRfqPage() {
           </div>
 
           <div className="flex flex-wrap gap-3">
-            <Link href="/fabrication" className="btn btn-outline-navy">
+            <Link href="/cj-packages" className="btn btn-outline-navy">
               {t.myRfq.addAnother}
             </Link>
             <Link href="/rfq" className="btn btn-outline-navy">
@@ -200,9 +204,12 @@ export default function MyRfqPage() {
               </div>
             </div>
 
+            <Honeypot />
+
             <button type="submit" className="btn btn-primary w-full sm:w-auto" disabled={status === "submitting"}>
               {status === "submitting" ? t.myRfq.submitting : t.myRfq.submit}
             </button>
+            <PrivacyNote />
           </div>
         </form>
       )}

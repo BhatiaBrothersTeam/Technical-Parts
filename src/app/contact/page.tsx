@@ -2,37 +2,46 @@ import type { Metadata } from "next";
 import { t } from "@/lib/locale";
 import { EnquiryForm } from "@/components/EnquiryForm";
 import { PageHero } from "@/components/PageHero";
+import { getContact } from "@/lib/contact";
 
 export const metadata: Metadata = {
   title: "Contact",
-  description: "Contact technicalparts.com for EPC package, C&J fabrication or RFQ enquiries.",
+  description: "Contact technicalparts.com for C&J package, EPC package or RFQ enquiries.",
 };
 
-const details = [
-  { label: "Address", value: "BB Group, Dubai, United Arab Emirates, P.O. Box 12345" },
-  { label: "Phone", value: "+971 4 123 4567" },
-  { label: "Email", value: "info@technicalparts.com" },
-];
-
 export default function ContactPage() {
+  const contact = getContact();
+  const details = [
+    { label: "Address", value: contact.address },
+    { label: "Phone", value: contact.phone, href: `tel:${contact.phone.replace(/[^\d+]/g, "")}` },
+    { label: "Email", value: contact.email, href: `mailto:${contact.email}` },
+  ];
+
   return (
     <>
       <PageHero
         eyebrow="Get in touch"
         title={t.contact.title}
         subtitle={t.contact.intro}
-        crumbs={[{ label: t.contact.title }]}
       />
       <div className="container-tp section-y">
         <div className="grid lg:grid-cols-5 gap-10">
           <div className="lg:col-span-2">
             <h2 className="text-xl font-extrabold text-tp-navy mb-2">{t.contact.detailsHeading}</h2>
-            <span className="badge-sample mb-5 inline-flex">{t.contact.placeholderNotice}</span>
+            {contact.isSample && <span className="badge-sample mb-5 inline-flex">{t.contact.placeholderNotice}</span>}
             <dl className="space-y-3">
               {details.map((d) => (
                 <div key={d.label} className="card p-4">
                   <dt className="text-xs font-bold uppercase tracking-wider text-tp-blue">{d.label}</dt>
-                  <dd className="text-[var(--tp-neutral-700)] mt-1">{d.value}</dd>
+                  <dd className="text-[var(--tp-neutral-700)] mt-1">
+                    {d.href ? (
+                      <a href={d.href} className="link-blue">
+                        {d.value}
+                      </a>
+                    ) : (
+                      d.value
+                    )}
+                  </dd>
                 </div>
               ))}
             </dl>

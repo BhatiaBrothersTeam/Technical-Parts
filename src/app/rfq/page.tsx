@@ -4,6 +4,8 @@ import { useState, type FormEvent } from "react";
 import { t } from "@/lib/locale";
 import { UploadDropzone } from "@/components/UploadDropzone";
 import { PageHero } from "@/components/PageHero";
+import { Honeypot, useFormTimer } from "@/components/SpamGuard";
+import { PrivacyNote } from "@/components/PrivacyNote";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
@@ -12,6 +14,7 @@ export default function RfqUploadPage() {
   const [status, setStatus] = useState<Status>("idle");
   const [leadId, setLeadId] = useState<string | null>(null);
   const [rejection, setRejection] = useState<string | null>(null);
+  const elapsed = useFormTimer();
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -20,6 +23,7 @@ export default function RfqUploadPage() {
     const fd = new FormData(form);
     fd.set("lead_type", "rfq_upload");
     fd.set("page_url", window.location.href);
+    fd.set("elapsed_ms", String(elapsed()));
     files.forEach((file) => fd.append("files", file));
 
     try {
@@ -54,7 +58,6 @@ export default function RfqUploadPage() {
       eyebrow="Request a quote"
       title={<>{t.rfqUpload.title} <span className="text-tp-accent">{t.rfqUpload.subtitle}</span></>}
       subtitle={t.rfqUpload.copy}
-      crumbs={[{ label: "Upload RFQ" }]}
     />
     <div className="container-tp section-y max-w-3xl">
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -101,9 +104,12 @@ export default function RfqUploadPage() {
             </div>
           </div>
 
+          <Honeypot />
+
           <button type="submit" className="btn btn-primary w-full sm:w-auto" disabled={status === "submitting"}>
             {status === "submitting" ? t.rfqUpload.submitting : t.rfqUpload.submit}
           </button>
+          <PrivacyNote />
         </div>
       </form>
     </div>
